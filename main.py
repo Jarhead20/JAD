@@ -2,9 +2,12 @@ import os, sys, math, signal
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PySide6.QtNetwork import QUdpSocket, QHostAddress
-from elements.gauge import Gauge
+from elements.gauge import RoundGauge, LinearGauge
+from elements.page import Page
+from elements.element_list import ElementList
 import socket, json
 import gpiod, time
+from controller.channels import channels
 
 
 os.environ["DISPLAY"] = ":0"
@@ -13,33 +16,13 @@ os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-class Display(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("JAD")
 
-        self.gauge = Gauge(
-            label="RPM x1000",
-            font_size=20
-        )
-
-        self.fuel_gauge = Gauge(
-            label="Fuel",
-            font_size=20,
-            max_val=1
-        )
-
-        lay = QVBoxLayout(self)
-        lay.setContentsMargins(0, 0, 0, 0)
-        lay.setSpacing(0)
-        lay.addWidget(self.gauge, 1)
-        lay.addWidget(self.fuel_gauge, 1)
-
-        self.t = QTimer(self)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    w = Display()
+
+
+    w = Page("pages/page1.json")
     w.setCursor(Qt.BlankCursor)
     w.showFullScreen()
 
@@ -56,14 +39,16 @@ if __name__ == "__main__":
             payload = bytes(d.data())
             try:
                 msg = json.loads(payload.decode("utf-8"))
-                rpm = msg.get("rpm", 0)
-                max_rpm = msg.get("max_rpm")
-                w.gauge.set_max_val(max_rpm/1000)
-                w.gauge.set_value(rpm/1000)
-                fuel_l = msg.get("fuel_l")
-                fuel_capacity = msg.get("fuel_capacity_l")
-                w.fuel_gauge.set_value(fuel_l/fuel_capacity or 0)
-                print(rpm)
+                # e.g. {"rpm": 6421, "fuel_l": 31.5, "gear": 3, "max_rpm": 9000}
+                # derive channels you want to expose:
+                fuel_l = msg.get("fuel_l", 0)
+                fuel_pct = fuel_l/msg.get("fuel_capacity_l", 0.0)
+                ch = {"rpm": msg.get("rpm", 0),
+                    "rpm_k": msg.get("rpm", 0)/1000.0,
+                    "fuel_l": fuel_l,
+                    "fuel_pct": fuel_pct,
+                    "gear": msg.get("gear", 0)}
+                channels.update(ch)
             except Exception as e:
                 print("bad packet:", e)
 
