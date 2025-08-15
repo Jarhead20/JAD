@@ -1,17 +1,26 @@
 import sys
+import os
 import signal
-from PySide6.QtWidgets import QApplication, QLabel
+from PySide6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QLabel
+from PySide6.QtSvgWidgets import QSvgWidget
 from PySide6.QtCore import Qt
+
+os.environ["DISPLAY"] = ":0"
+os.environ["XAUTHORITY"] = "/home/jad/.Xauthority"
+os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 # Allow Ctrl+C to kill the app
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 app = QApplication(sys.argv)
 
-label = QLabel("Hello World")
-label.setAlignment(Qt.AlignCenter)
-label.setStyleSheet("font-size: 32px; background: black; color: lime;")
+central_widget = QWidget()
+layout = QVBoxLayout(central_widget)
 
-label.showFullScreen()  # Fullscreen mode
+svg_widget = QSvgWidget("/home/jad/JAD/assets/BMW.svg")
+layout.addWidget(svg_widget)
+
+
+central_widget.showFullScreen()
 
 sys.exit(app.exec())
