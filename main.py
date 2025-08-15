@@ -57,7 +57,7 @@ if __name__ == "__main__":
                 msg = json.loads(payload.decode("utf-8"))
                 rpm = msg.get("rpm", 0)
                 max_rpm = msg.get("max_rpm")
-                w.gauge.set_max_val(max_rpm)
+                w.gauge.set_max_val(max_rpm/1000)
                 w.gauge.set_value(rpm/1000)
                 fuel_l = msg.get("fuel_l")
                 fuel_capacity = msg.get("fuel_capacity_l")
