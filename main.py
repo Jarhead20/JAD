@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PySide6.QtNetwork import QUdpSocket, QHostAddress
 from elements.gauge import Gauge
 import socket, json
+import gpiod, time
 
 
 os.environ["DISPLAY"] = ":0"
@@ -24,7 +25,7 @@ class Display(QWidget):
 
         self.fuel_gauge = Gauge(
             label="Fuel",
-            font_size=10,
+            font_size=20,
             max_val=1
         )
 

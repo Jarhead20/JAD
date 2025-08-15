@@ -150,5 +150,11 @@ class Gauge(QWidget):
         # Text
         p.setPen(self._text_color)
         p.setFont(QFont("DejaVu Sans", self._font_size))
+        center_text = f"{self._label}"
+        # Constrain to inner circle area
+        inner_ratio = 0.55
+        inner_side  = side * inner_ratio
+        ctr = QRectF(cx - inner_side/2, cy - inner_side/2, inner_side, inner_side)
+        p.drawText(ctr, Qt.AlignCenter | Qt.TextWordWrap, center_text)
 
         p.end()
