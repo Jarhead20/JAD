@@ -7,6 +7,8 @@ class Gauge(QWidget):
                  thickness=24, initial_value = 0.0, start_angle = 225, 
                  span_angle = -270, text_color=Qt.white,
                  font_size = 10,
+                 redline = 8,
+                 
                    parent=None):
         super().__init__(parent)
         self._value = initial_value
