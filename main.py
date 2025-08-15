@@ -22,10 +22,17 @@ class Display(QWidget):
             font_size=20
         )
 
+        self.fuel_gauge = Gauge(
+            label="Fuel",
+            font_size=10,
+            max_val=1
+        )
+
         lay = QVBoxLayout(self)
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(0)
         lay.addWidget(self.gauge, 1)
+        lay.addWidget(self.fuel_gauge, 1)
 
         self.t = QTimer(self)
 
@@ -49,7 +56,13 @@ if __name__ == "__main__":
             try:
                 msg = json.loads(payload.decode("utf-8"))
                 rpm = msg.get("rpm", 0)
-                w.gauge.set_value(max(0.0, min(1.0, rpm / 8000.0)))
+                max_rpm = msg.get("max_rpm")
+                w.gauge.set_max_val(max_rpm)
+                w.gauge.set_value(rpm/1000)
+                fuel_l = msg.get("fuel_l")
+                fuel_capacity = msg.get("fuel_capacity_l")
+                w.fuel_gauge.set_value(fuel_l/fuel_capacity or 0)
+                print(rpm)
             except Exception as e:
                 print("bad packet:", e)
 
