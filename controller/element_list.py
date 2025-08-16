@@ -10,6 +10,7 @@ from elements.gear import GearElement
 from elements.image import ImageElement
 from elements.readout import Readout
 from elements.geometry import GeometryElement
+from elements.group import Group
 
 def _qcolor(c):
     if isinstance(c, QColor): return c
@@ -51,6 +52,8 @@ class ElementList:
             x = int(item.get("x", 0)); y = int(item.get("y", 0))
             w = int(item.get("width", 200)); h = int(item.get("height", 100))
             centered = bool(item.get("centered", False))
+
+            
 
             if t == "text":
                 e = TextElement(

@@ -1,15 +1,17 @@
 import os, sys, json, signal, time
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, QFileSystemWatcher, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PySide6.QtNetwork import QUdpSocket, QHostAddress
 import glob
 
 import gpiod
 from gpiod.line import Direction, Bias, Value
+import re
 
 from controller.page import Page
 from controller.page_controller import PageCycler
 from controller.channels import channels
+from hardware.shift_lights import ShiftLights
 
 # ---- Qt / display env (Pi screen) ----
 os.environ["DISPLAY"] = ":0"
@@ -18,30 +20,95 @@ os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-# ---- Pages to cycle through (add your files here) ----
-# PAGE_PATHS = [
-#     "pages/page1.json",
-#     "pages/page2.json",
-# ]
+PINS = [6, 5, 22, 27, 17, 12, 25, 16, 24, 23]  # BCM offsets, pick your 10
 
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 PAGES_DIR = os.path.join(BASE_DIR, "pages")
 
+def _natural_key(path: str):
+    name = os.path.basename(path).lower()
+    return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", name)]
+
+def discover_pages():
+    files = glob.glob(os.path.join(PAGES_DIR, "*.json"))
+    files.sort(key=_natural_key)
+    return files
+
+
 
 # ---- App start ----
 if __name__ == "__main__":
-
-    page_paths = glob.glob(os.path.join(PAGES_DIR, "*.json"))
+    page_paths = discover_pages()
 
     app = QApplication(sys.argv)
 
     # Root container that we keep; we swap Page children inside it
     root = QWidget()
+    root.setObjectName("root")
     root.setCursor(Qt.BlankCursor)
-    cycler = PageCycler(root, page_paths)
+    
+    root.setAttribute(Qt.WA_StyledBackground, True)  # only root paints bg
+    root.setStyleSheet("#root { background: #000; }")  # scoped to root only
+    root.setFixedSize(1024, 600)
     root.showFullScreen()
-    root.setAttribute(Qt.WA_StyledBackground, True)
-    root.setStyleSheet("background:#000;")
+
+    cycler = PageCycler(root=root, paths=page_paths)
+
+    sl = ShiftLights(PINS, mode="bar",active_high=True, flash_at=0.95, flash_hz=8.0)
+
+    
+    
+
+    watcher = QFileSystemWatcher()
+    def _reset_watches():
+        # clear old
+        for f in watcher.files(): watcher.removePath(f)
+        for d in watcher.directories(): watcher.removePath(d)
+        # (re)add current dir + files
+        watcher.addPath(PAGES_DIR)
+        if page_paths:
+            watcher.addPaths(page_paths)
+
+    _reset_watches()
+
+    # Debounced reloads (avoid reloading on half-written files)
+    _pending = {}
+
+    def _reload_path(path):
+        # Re-add file to watch (Qt may drop it if editor rewrites the file)
+        if os.path.exists(path) and path not in watcher.files():
+            watcher.addPath(path)
+        try:
+            # If the changed file is the current page, reload it
+            if path == cycler.current_path():
+                cycler.reload_current()
+            # Always refresh the page list in case new files appeared/vanished
+            _refresh_pages()
+        except Exception as e:
+            print("hot-reload failed:", e)
+            # Try again shortly (file might still be being written)
+            QTimer.singleShot(300, lambda: _reload_path(path))
+
+    def _schedule_reload(path):
+        # coalesce bursts from some editors
+        if path in _pending:
+            return
+        _pending[path] = True
+        QTimer.singleShot(150, lambda: (_pending.pop(path, None), _reload_path(path)))
+
+    def _refresh_pages():
+        global page_paths
+        new_paths = discover_pages()
+        if new_paths != page_paths:
+            page_paths = new_paths
+            cycler.set_pages(page_paths)
+            _reset_watches()
+
+    # Signals
+    watcher.fileChanged.connect(_schedule_reload)
+    watcher.directoryChanged.connect(lambda _p: (_reset_watches(), _refresh_pages()))
+
+    
 
     ui_tick = QTimer()
     ui_tick.setInterval(40)  # ~25 FPS
@@ -86,53 +153,51 @@ if __name__ == "__main__":
                 }
                 channels.update(ch)
 
+                # inside on_ready() after parsing msg
+                rpm = msg.get("rpms") or msg.get("rpm") or 0
+                max_rpm = msg.get("max_rpm", 9000)
+                min_rpm = int(0.60 * max_rpm)  # lights start at 60% of redline
+                sl.update_rpm(rpm, min_rpm=min_rpm, max_rpm=max_rpm)
+
+
             except Exception as e:
                 print("bad packet:", e)
 
     sock.readyRead.connect(on_ready)
 
-    # ---- GPIO: button cycles pages; LED mirrors press ----
-    LED = 17   # BCM17 (pin 11)
     BTN = 27   # BCM27 (pin 13) -> button to GND (active-low)
 
-    req = gpiod.request_lines(
-        "/dev/gpiochip0",
-        consumer="PAGE_CYCLE",
-        config={
-            LED: gpiod.LineSettings(direction=Direction.OUTPUT,
-                                    output_value=Value.INACTIVE),
-            BTN: gpiod.LineSettings(direction=Direction.INPUT,
-                                    bias=Bias.PULL_UP),
-        }
-    )
+    # req = gpiod.request_lines(
+    #     "/dev/gpiochip0",
+    #     consumer="PAGE_CYCLE",
+    #     config={
+    #         BTN: gpiod.LineSettings(direction=Direction.INPUT,
+    #                                 bias=Bias.PULL_UP),
+    #     }
+    # )
 
-    DEBOUNCE_S = 0.05  # 50 ms debounce
-    state = {"pressed": False, "t": 0.0}
+    # DEBOUNCE_S = 0.05  # 50 ms debounce
+    # state = {"pressed": False, "t": 0.0}
 
-    def poll_button():
-        v = req.get_value(BTN)
-        now = time.monotonic()
-        pressed = (v == Value.INACTIVE)  # pull-up: LOW means pressed
-        if pressed != state["pressed"] and (now - state["t"]) >= DEBOUNCE_S:
-            state["pressed"] = pressed
-            state["t"] = now
-            # LED mirrors button state
-            req.set_value(LED, Value.ACTIVE if pressed else Value.INACTIVE)
-            if pressed:
-                cycler.next_page()
+    # def poll_button():
+    #     v = req.get_value(BTN)
+    #     now = time.monotonic()
+    #     pressed = (v == Value.INACTIVE)  # pull-up: LOW means pressed
+    #     if pressed != state["pressed"] and (now - state["t"]) >= DEBOUNCE_S:
+    #         state["pressed"] = pressed
+    #         state["t"] = now
+    #         if pressed:
+    #             cycler.next_page()
 
-    btn_timer = QTimer()
-    btn_timer.setInterval(10)  # 10 ms poll
-    btn_timer.timeout.connect(poll_button)
-    btn_timer.start()
+    # btn_timer = QTimer()
+    # btn_timer.setInterval(10)  # 10 ms poll
+    # btn_timer.timeout.connect(poll_button)
+    # btn_timer.start()
 
 
     # ---- Clean up on exit ----
     def cleanup():
-        try:
-            req.set_value(LED, Value.INACTIVE)
-        except Exception:
-            pass
+        sl.close()
         try:
             req.release()
         except Exception:
@@ -141,3 +206,4 @@ if __name__ == "__main__":
     app.aboutToQuit.connect(cleanup)
 
     sys.exit(app.exec())
+

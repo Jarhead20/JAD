@@ -1,36 +1,10 @@
-# Pi 5 / libgpiod v2.x
-import time, gpiod
-from gpiod.line import Direction, Bias, Value
+from time import sleep
+from hardware.shift_lights import ShiftLights
 
-LED = 17   # BCM17 (pin 11)
-BTN = 27   # BCM27 (pin 13) -> wire to GND via button
-
-# Request both lines in one go:
-req = gpiod.request_lines(
-    "/dev/gpiochip0",
-    consumer="LED_BUTTON",
-    config={
-        LED: gpiod.LineSettings(direction=Direction.OUTPUT,
-                                output_value=Value.INACTIVE),  # LED off initially
-        BTN: gpiod.LineSettings(direction=Direction.INPUT,
-                                bias=Bias.PULL_UP)              # internal pull-up
-    }
-)
-
-print("Press Ctrl+C to quit")
-try:
-    prev = None
-    while True:
-        # With pull-up: released = HIGH (= ACTIVE), pressed to GND = LOW (= INACTIVE)
-        pressed = (req.get_value(BTN) == Value.INACTIVE)
-        if pressed != prev:
-            req.set_value(LED, Value.ACTIVE if pressed else Value.INACTIVE)
-            prev = pressed
-        time.sleep(0.01)  # 10 ms poll (acts as debounce)
-        print(pressed)
-except KeyboardInterrupt:
-    pass
-finally:
-    # ensure LED off and release
-    req.set_value(LED, Value.INACTIVE)
-    req.release()
+PINS = [6, 5, 22, 27, 17, 12, 25, 16, 24, 23]  # BCM offsets, pick your 10
+with ShiftLights(PINS, mode="bar", active_high=True, flash_at=0.98, flash_hz=8.0) as sl:
+    # Demo sweep
+    for k in list(range(0, 110)):
+        sl.update_ratio(k/100.0)
+        sleep(0.1)
+    sl.close()

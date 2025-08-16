@@ -12,14 +12,16 @@ class Element(QWidget):
                  bg_color=Qt.black, parent: QWidget | None = None):
         super().__init__(parent)
         self._bg_color = QColor(str(bg_color)) if not isinstance(bg_color, QColor) else bg_color
-        self.setAttribute(Qt.WA_StyledBackground, True)
-        self.setAttribute(Qt.WA_OpaquePaintEvent, self._bg_color.alpha() > 0)
         self._centered = centered
         if(self._centered):
             self.setGeometry(int(x-(width/2)), int(y-(height/2)), int(width), int(height))
         else:
             self.setGeometry(int(x), int(y), int(width), int(height))
 
+        self.setAutoFillBackground(False)
+        self.setAttribute(Qt.WA_StyledBackground, False)
+        self.setAttribute(Qt.WA_OpaquePaintEvent, self._bg_color.alpha() > 0)
+        self.setStyleSheet("background: transparent;")  # guard against inherited styles
 
         self._rule = None            # normalized rule to evaluate
         self._reset_rule = None

@@ -1,0 +1,122 @@
+{
+  "page": { "bg_color": "#000000" },
+
+  "channels": {
+    "rpm_k":     { "source": "rpm", "scale": 0.001, "clamp": [0, 9] },
+    "rpm_norm":  { "source": "rpm", "ratio_to": "max_rpm", "clamp": [0, 1], "ema": 0.15 },
+    "fuel_pct":  { "source": "fuel_l", "ratio_to": "fuel_capacity_l", "clamp": [0, 1], "ema": 0.2 },
+    "speed_kmh": { "source": "speed_kmh", "ema": 0.1 }
+  },
+
+  "elements": [
+    { "type": "text", "x": 512, "y": 50, "width": 560, "height": 60, "centered": true,
+      "text": "Just A Dash", "font_px": 44, "bold": true, "color": "#5f6a73",
+      "bg_color": "transparent", "align": "center" },
+
+    { "type":"geometry","shape":"round_rect","x":512,"y":220,"width":280,"height":230,"centered":true,
+      "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+
+    { "type":"readout","x":512,"y":230,"width":220,"height":60,"centered":true,
+      "label":"","channel":"speed_kmh","fmt":"{value:.0f}","units":" km/h",
+      "label_color":"#8a8f98","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":1,"value_font_px":36,"align":"center" },
+
+    { "type":"gear","x":512,"y":220,"width":220,"height":160,"centered":true,
+      "channel":"gear","font_px":120,"bold":true,"color":"white","bg_color":"transparent","align":"center" },
+
+    { "type":"geometry","shape":"round_rect","x":180,"y":300,"width":260,"height":300,"centered":true,
+      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+
+    { "type":"readout","x":180,"y":360,"width":220,"height":40,"centered":true,
+      "label":"Oil temp","channel":"oil_c","fmt":"{value:.1f}","units":" °C",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":16,"value_font_px":24,"align":"right" },
+
+    { "type":"readout","x":180,"y":400,"width":220,"height":40,"centered":true,
+      "label":"Oil press","channel":"oil_press","fmt":"{value:.1f}","units":" bar",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":16,"value_font_px":24,"align":"right" },
+
+    { "type":"readout","x":180,"y":440,"width":220,"height":40,"centered":true,
+      "label":"Water temp","channel":"water_c","fmt":"{value:.1f}","units":" °C",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":16,"value_font_px":24,"align":"right" },
+
+    { "type":"readout","x":180,"y":480,"width":220,"height":40,"centered":true,
+      "label":"Water press","channel":"water_press","fmt":"{value:.1f}","units":" bar",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":16,"value_font_px":24,"align":"right" },
+
+    { "type":"geometry","shape":"round_rect","x":780,"y":330,"width":260,"height":200,"centered":false,
+      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+
+    { "type":"readout","x":820,"y":350,"width":80,"height":42,"centered":false,
+      "label":"Lap","channel":"lap","fmt":"{value:.0f}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":16,"value_font_px":26,"align":"left" },
+
+    { "type":"text","x":910,"y":350,"width":100,"height":42,"centered":false,
+      "text":"DRY","font_px":18,"bold":true,"color":"#2fe0b9","bg_color":"transparent","align":"right" },
+
+    { "type":"text","x":910,"y":390,"width":110,"height":26,"centered":false,
+      "text":"Laptime","font_px":16,"bold":false,"color":"#cbd1d6","bg_color":"transparent","align":"right" },
+
+    { "type":"readout","x":910,"y":420,"width":110,"height":46,"centered":false,
+      "label":"","channel":"lap_time_str","fmt":"{value}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":1,"value_font_px":28,"align":"right" },
+
+    { "type":"text","x":820,"y":470,"width":90,"height":26,"centered":false,
+      "text":"Time Diff","font_px":14,"bold":false,"color":"#cbd1d6","bg_color":"transparent","align":"left" },
+
+    { "type":"readout","x":820,"y":495,"width":90,"height":32,"centered":false,
+      "label":"","channel":"delta_best_str","fmt":"{value}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":1,"value_font_px":20,"align":"left" },
+
+    { "type":"text","x":920,"y":470,"width":100,"height":26,"centered":false,
+      "text":"Pred. Time","font_px":14,"bold":false,"color":"#cbd1d6","bg_color":"transparent","align":"right" },
+
+    { "type":"readout","x":920,"y":495,"width":100,"height":32,"centered":false,
+      "label":"","channel":"pred_time_str","fmt":"{value}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":1,"value_font_px":20,"align":"right" },
+
+    { "type":"geometry","shape":"round_rect","x":512,"y":520,"width":360,"height":110,"centered":true,
+      "corner_radius":12,"fill_color":"#15181e","stroke_color":"#f5a623","stroke_width":2,"bg_color":"transparent" },
+
+    { "type":"text","x":512,"y":486,"width":360,"height":28,"centered":true,
+      "text":"TYRE PRESS","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
+
+    { "type":"readout","x":432,"y":540,"width":160,"height":40,"centered":false,
+      "label":"","channel":"wheel_pressure_fl","fmt":"{value:.2f}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff",
+      "bg_color":"transparent","label_font_px":1,"value_font_px":24,"align":"center" },
+
+    { "type":"readout","x":584,"y":540,"width":160,"height":40,"centered":false,
+      "label":"","channel":"wheel_pressure_fr","fmt":"{value:.2f}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff",
+      "bg_color":"transparent","label_font_px":1,"value_font_px":24,"align":"center" },
+
+    { "type":"readout","x":432,"y":580,"width":160,"height":40,"centered":false,
+      "label":"","channel":"wheel_pressure_rl","fmt":"{value:.2f}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff",
+      "bg_color":"transparent","label_font_px":1,"value_font_px":24,"align":"center" },
+
+    { "type":"readout","x":584,"y":580,"width":160,"height":40,"centered":false,
+      "label":"","channel":"wheel_pressure_rr","fmt":"{value:.2f}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff",
+      "bg_color":"transparent","label_font_px":1,"value_font_px":24,"align":"center" },
+
+    { "type":"geometry","shape":"round_rect","x":900,"y":540,"width":190,"height":70,"centered":false,
+      "corner_radius":10,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+
+    { "type":"text","x":910,"y":546,"width":170,"height":24,"centered":false,
+      "text":"Brake Bias","font_px":16,"bold":false,"color":"#cbd1d6","bg_color":"transparent","align":"left" },
+
+    { "type":"readout","x":910,"y":566,"width":170,"height":40,"centered":false,
+      "label":"","channel":"brake_bias","fmt":"{value:.0f}","units":"",
+      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
+      "label_font_px":1,"value_font_px":28,"align":"left" }
+  ]
+}
