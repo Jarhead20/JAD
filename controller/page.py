@@ -1,4 +1,4 @@
-from elements.element_list import ElementList
+from controller.element_list import ElementList
 from PySide6.QtCore import Qt, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PySide6.QtNetwork import QUdpSocket, QHostAddress

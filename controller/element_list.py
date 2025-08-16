@@ -7,6 +7,7 @@ from controller.channels import channels
 from elements.gauge import RoundGauge, LinearGauge
 from elements.text import TextElement
 from elements.gear import GearElement
+from elements.image import ImageElement
 
 def _qcolor(c):
     if isinstance(c, QColor): return c
@@ -131,6 +132,20 @@ class ElementList:
                     italic=bool(item.get("italic", False)),
                     align=_align(item.get("align", "center")),
                     wrap=bool(item.get("wrap", False)),
+                    parent=parent
+                )
+                e.show()
+                self._elements.append(e)
+            elif t == "image":
+                e = ImageElement(
+                    x=x, y=y, width=w, height=h,
+                    centered=centered,
+                    path=item.get("path", ""),
+                    mode=item.get("mode", "contain"),          # contain | cover | stretch
+                    align=item.get("align", "center"),         # left/right/top/bottom/center...
+                    opacity=float(item.get("opacity", 1.0)),
+                    rotation=float(item.get("rotation", 0.0)),
+                    bg_color=item.get("bg_color", "transparent"),
                     parent=parent
                 )
                 e.show()

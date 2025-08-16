@@ -28,6 +28,17 @@
       "text": "JAD",               
       "fmt": "{value}",               
       "font_px": 72, "bold": true
+    },
+    {
+      "type": "image",
+      "x": 512, "y": 300, "width": 200, "height": 200,
+      "centered": true,
+      "path": "assets/BMW.svg",
+      "mode": "contain",
+      "align": "center",
+      "opacity": 1.0,
+      "rotation": 0,
+      "bg_color": "transparent"
     }
   ]
 }

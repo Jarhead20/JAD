@@ -1,5 +1,5 @@
 from PySide6.QtCore import Qt, QSize, QRectF
-from PySide6.QtGui import QPainter
+from PySide6.QtGui import QPainter, QColor
 from PySide6.QtWidgets import QWidget
 from controller.channels import channels
 
@@ -55,8 +55,9 @@ class Element(QWidget):
     def update_val(self, store):
         pass
 
-    # Default paint: fill background (subclasses can overpaint)
     def paintEvent(self, _):
         p = QPainter(self)
-        p.fillRect(self.rect(), self._bg_color)
+        # Only fill if bg is a valid QColor with alpha > 0
+        if isinstance(self._bg_color, QColor) and self._bg_color.isValid() and self._bg_color.alpha() > 0:
+            p.fillRect(self.rect(), self._bg_color)
         p.end()

@@ -59,7 +59,6 @@ class GearElement(TextElement):
         if v == 1:
             return "N"
         
-        print(v)
         return str(v - 1)
 
     def update_val(self, store):
