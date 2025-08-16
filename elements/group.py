@@ -61,7 +61,7 @@ class Group(Element):
     # tick children recursively (Page will call propagate_tick on top-levels)
     def propagate_tick(self, store):
         for c in self._children:
-            upd = getattr(c, "update_from_channels", None)
+            upd = getattr(c, "update_val", None)
             if upd: upd(store)
             vis = getattr(c, "evaluate_visibility", None)
             if vis: vis(store)

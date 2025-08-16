@@ -20,7 +20,7 @@ os.environ["QT_QPA_PLATFORM"] = "xcb"
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
 
-PINS = [6, 5, 22, 27, 17, 12, 25, 16, 24, 23]  # BCM offsets, pick your 10
+PINS = [6, 5, 22, 27, 17, 16, 12, 25, 24, 23]  # BCM offsets, pick your 10
 
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 PAGES_DIR = os.path.join(BASE_DIR, "pages")
@@ -135,6 +135,7 @@ if __name__ == "__main__":
                 cap = msg.get("fuel_capacity_l", 0.0)
                 fuel_pct = (fuel_l / cap) if cap else 0.0
                 wear = msg.get("tyre_wear", [None, None, None, None])
+                pres = msg.get("tyre_pres", [None, None, None, None])
                 # Assume [FL, FR, RL, RR]
                 ch = {
                     "rpm": msg.get("rpm", 0),
@@ -142,12 +143,16 @@ if __name__ == "__main__":
                     "fuel_l": msg.get("fuel_l", 0.0),
                     "fuel_pct": (msg.get("fuel_l", 0.0) / msg.get("fuel_capacity_l", 0.0)) if msg.get("fuel_capacity_l") else 0.0,
                     "gear": msg.get("gear", 0),
-                    "speed": msg.get("speed", 0.0)/3.6,
+                    "speed": msg.get("speed", 0.0),
                     # Tyre wear raw values
                     "tyre_wear_fl": wear[0]/100,
                     "tyre_wear_fr": wear[1]/100,
                     "tyre_wear_rl": wear[2]/100,
                     "tyre_wear_rr": wear[3]/100,
+                    "wheel_pressure_fl": pres[0]/100,
+                    "wheel_pressure_fr": pres[1]/100,
+                    "wheel_pressure_rl": pres[2]/100,
+                    "wheel_pressure_rr": pres[3]/100,
                     "brake": msg.get("brake", 0.0),
                     "gas": msg.get("gas", 0.0),
                 }

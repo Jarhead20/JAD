@@ -46,184 +46,16 @@ class ElementList:
         # 1) Setup channel transforms (derived channels)
         self._setup_channel_transforms(data.get("channels", {}))
 
-        # 2) Instantiate elements
+        self._elements = []  # reset for this page
+
+        # 2) Build elements (top-level only; groups will own their children)
         for item in data.get("elements", []):
-            t = str(item.get("type", "text")).lower()
-            x = int(item.get("x", 0)); y = int(item.get("y", 0))
-            w = int(item.get("width", 200)); h = int(item.get("height", 100))
-            centered = bool(item.get("centered", False))
+            w = self._parse_item(item, parent=parent)
+            if w is not None:
+                self._elements.append(w)
 
-            
-
-            if t == "text":
-                e = TextElement(
-                    x, y, w, h, centered,
-                    item.get("text", ""),
-                    color=_qcolor(item.get("color", "white")),
-                    bg_color=_qcolor(item.get("bg_color", "black")),
-                    align=_align(item.get("align", "center")),
-                    font_family=item.get("font_family", "DejaVu Sans"),
-                    font_px=int(item.get("font_px", 24)),
-                    bold=bool(item.get("bold", False)),
-                    italic=bool(item.get("italic", False)),
-                    wrap=bool(item.get("wrap", True)),
-                    # channel bindings:
-                    channel=item.get("channel"),
-                    fmt=item.get("fmt", "{value}"),
-                    parent=parent
-                )
-
-            elif t == "round_gauge":
-                e = RoundGauge(
-                    x=x, y=y, width=w, height=h,
-                    centered=centered,
-                    label=item.get("label", "Label"),
-                    bar_color=_qcolor(item.get("bar_color", Qt.green)),
-                    track_color=_qcolor(item.get("track_color", Qt.gray)),
-                    bg_color=_qcolor(item.get("bg_color", Qt.black)),
-                    text_color=_qcolor(item.get("text_color", Qt.white)),
-                    redline_color=_qcolor(item.get("redline_color", Qt.red)),
-                    font_size=int(item.get("font_size", 14)),
-                    max_val=float(item.get("max_val", 9.0)),
-                    redline=item.get("redline", None),
-                    thickness=int(item.get("thickness", 24)),
-                    start_angle=float(item.get("start_angle", 225)),
-                    span_angle=float(item.get("span_angle", -270)),
-                    minor_per_segment=int(item.get("minor_per_segment", 4)),
-                    # channel bindings:
-                    channel=item.get("channel"),
-                    scale=float(item.get("scale", 1.0)),
-                    offset=float(item.get("offset", 0.0)),
-                    parent=parent
-                )
-
-            elif t == "linear_gauge":
-                e = LinearGauge(
-                    x=x, y=y, width=w, height=h,
-                    centered=centered,
-                    label=item.get("label", "Label"),
-                    bar_color=_qcolor(item.get("bar_color", Qt.green)),
-                    track_color=_qcolor(item.get("track_color", Qt.gray)),
-                    bg_color=_qcolor(item.get("bg_color", Qt.black)),
-                    text_color=_qcolor(item.get("text_color", Qt.white)),
-                    redline_color=_qcolor(item.get("redline_color", Qt.red)),
-                    font_size=int(item.get("font_size", 14)),
-                    max_val=float(item.get("max_val", 100.0)),
-                    redline=item.get("redline", None),
-                    thickness=int(item.get("thickness", 24)),
-                    horizontal=bool(item.get("horizontal", True)),
-                    tick_step=float(item.get("tick_step", 10)),
-                    minor_per_major=int(item.get("minor_per_major", 4)),
-                    corner_radius=int(item.get("corner_radius", 8)),
-                    # channel bindings:
-                    channel=item.get("channel"),
-                    scale=float(item.get("scale", 1.0)),
-                    offset=float(item.get("offset", 0.0)),
-                    parent=parent
-                )
-
-            elif t == "gear":
-                # center handling like text/round/linear
-                gx, gy = (x, y)  # GearElement uses center coords via TextElement
-                e = GearElement(
-                    gx, gy, w, h,
-                    bool(item.get("centered", True)),
-                    channel=item.get("channel", "gear"),
-                    color=_qcolor(item.get("color", "white")),
-                    bg_color=_qcolor(item.get("bg_color", "black")),
-                    font_family=item.get("font_family", "DejaVu Sans"),
-                    font_px=int(item.get("font_px", 72)),
-                    bold=bool(item.get("bold", True)),
-                    italic=bool(item.get("italic", False)),
-                    align=_align(item.get("align", "center")),
-                    wrap=bool(item.get("wrap", False)),
-                    parent=parent
-                )
-                e.show()
-                self._elements.append(e)
-            elif t == "image":
-                e = ImageElement(
-                    x=x, y=y, width=w, height=h,
-                    centered=centered,
-                    path=item.get("path", ""),
-                    mode=item.get("mode", "contain"),          # contain | cover | stretch
-                    align=item.get("align", "center"),         # left/right/top/bottom/center...
-                    opacity=float(item.get("opacity", 1.0)),
-                    rotation=float(item.get("rotation", 0.0)),
-                    bg_color=item.get("bg_color", "transparent"),
-                    parent=parent
-                )
-                e.show()
-                self._elements.append(e)
-            elif t == "readout":
-                e = Readout(
-                    x=x, y=y, width=w, height=h,
-                    centered=centered,
-                    label=item.get("label", "LABEL"),
-                    channel=item.get("channel"),
-                    fmt=item.get("fmt", "{value}"),
-                    units=item.get("units", ""),
-                    scale=float(item.get("scale", 1.0)),
-                    offset=float(item.get("offset", 0.0)),
-                    label_color=item.get("label_color", "#9aa0a6"),
-                    value_color=item.get("value_color", "#ffffff"),
-                    bg_color=item.get("bg_color", "transparent"),
-                    label_font_family=item.get("label_font_family", "DejaVu Sans"),
-                    value_font_family=item.get("value_font_family", "DejaVu Sans"),
-                    label_font_px=int(item.get("label_font_px", 18)),
-                    value_font_px=int(item.get("value_font_px", 42)),
-                    label_bold=bool(item.get("label_bold", True)),
-                    value_bold=bool(item.get("value_bold", True)),
-                    label_italic=bool(item.get("label_italic", False)),
-                    value_italic=bool(item.get("value_italic", False)),
-                    align=item.get("align", "center"),
-                    padding=int(item.get("padding", 8)),
-                    spacing=int(item.get("spacing", 4)),
-                    label_ratio=float(item.get("label_ratio", 0.40)),
-                    parent=parent
-                )
-                # common post-creation bits
-                e.setVisible(bool(item.get("visible", True)))
-                e.set_visible_when(item.get("visible_when", None))
-                e.show()
-                self._elements.append(e)
-            elif t == "geometry":
-                e = GeometryElement(
-                    x=x, y=y, width=w, height=h,
-                    centered=centered,
-                    shape=item.get("shape", "rect"),
-                    fill_color=item.get("fill_color", "transparent"),
-                    stroke_color=item.get("stroke_color", "white"),
-                    stroke_width=float(item.get("stroke_width", 2.0)),
-                    corner_radius=float(item.get("corner_radius", 12.0)),
-                    start_angle=float(item.get("start_angle", 0.0)),
-                    span_angle=float(item.get("span_angle", 360.0)),
-                    ring_width=item.get("ring_width", None),
-                    line_dir=item.get("line_dir", "h"),
-                    rotation=float(item.get("rotation", 0.0)),
-                    opacity=float(item.get("opacity", 1.0)),
-                    # channels (optional; for ring/arc progress)
-                    channel=item.get("channel"),
-                    scale=float(item.get("scale", 1.0)),
-                    offset=float(item.get("offset", 0.0)),
-                    max_val=float(item.get("max_val", 1.0)),
-                    bg_color=item.get("bg_color", "transparent"),
-                    parent=parent
-                )
-                e.setVisible(bool(item.get("visible", True)))
-                e.set_visible_when(item.get("visible_when"))
-                e.show()
-                self._elements.append(e)
-            else:
-                print(f"[parser] Unknown element type: {t}")
-                continue
-
-            e.setParent(parent)
-            e.setVisible(bool(item.get("visible", True)))
-            e.set_visible_when(item.get("visible_when", None))
-            e.show()
-            self._elements.append(e)
         return data.get("page", {})
+
 
     # --- transforms: derive channels from other channels ---
     def _setup_channel_transforms(self, spec: dict):
@@ -291,3 +123,180 @@ class ElementList:
 
             # try an initial compute with whatever is in the store now
             recompute(target, cfg)
+    def _parse_item(self, item: dict, parent=None):
+        t = str(item.get("type", "text")).lower()
+        x = int(item.get("x", 0)); y = int(item.get("y", 0))
+        w = int(item.get("width", 200)); h = int(item.get("height", 100))
+        centered = bool(item.get("centered", False))
+
+        # ----- GROUP -----
+        if t == "group":
+            g = Group(x, y, w, h, centered=centered,
+                    bg_color=_qcolor(item.get("bg_color", "transparent")),
+                    parent=parent)
+            g.setVisible(bool(item.get("visible", True)))
+            g.set_visible_when(item.get("visible_when", None))
+            # build children relative to the group
+            for child in item.get("children", []):
+                cw = self._parse_item(child, parent=g)
+                if cw is not None:
+                    g.add_child(cw)
+            return g
+
+        # ----- TEXT -----
+        if t == "text":
+            e = TextElement(
+                x, y, w, h, centered,
+                item.get("text", ""),
+                color=_qcolor(item.get("color", "white")),
+                bg_color=_qcolor(item.get("bg_color", "black")),
+                align=_align(item.get("align", "center")),
+                font_family=item.get("font_family", "DejaVu Sans"),
+                font_px=int(item.get("font_px", 24)),
+                bold=bool(item.get("bold", False)),
+                italic=bool(item.get("italic", False)),
+                wrap=bool(item.get("wrap", True)),
+                channel=item.get("channel"),
+                fmt=item.get("fmt", "{value}"),
+                parent=parent
+            )
+
+        # ----- ROUND GAUGE -----
+        elif t == "round_gauge":
+            e = RoundGauge(
+                x=x, y=y, width=w, height=h, centered=centered,
+                label=item.get("label", "Label"),
+                bar_color=_qcolor(item.get("bar_color", Qt.green)),
+                track_color=_qcolor(item.get("track_color", Qt.gray)),
+                bg_color=_qcolor(item.get("bg_color", Qt.black)),
+                text_color=_qcolor(item.get("text_color", Qt.white)),
+                redline_color=_qcolor(item.get("redline_color", Qt.red)),
+                font_size=int(item.get("font_size", 14)),
+                max_val=float(item.get("max_val", 9.0)),
+                redline=item.get("redline", None),
+                thickness=int(item.get("thickness", 24)),
+                start_angle=float(item.get("start_angle", 225)),
+                span_angle=float(item.get("span_angle", -270)),
+                minor_per_segment=int(item.get("minor_per_segment", 4)),
+                channel=item.get("channel"),
+                scale=float(item.get("scale", 1.0)),
+                offset=float(item.get("offset", 0.0)),
+                parent=parent
+            )
+
+        # ----- LINEAR GAUGE -----
+        elif t == "linear_gauge":
+            e = LinearGauge(
+                x=x, y=y, width=w, height=h, centered=centered,
+                label=item.get("label", "Label"),
+                bar_color=_qcolor(item.get("bar_color", Qt.green)),
+                track_color=_qcolor(item.get("track_color", Qt.gray)),
+                bg_color=_qcolor(item.get("bg_color", Qt.black)),
+                text_color=_qcolor(item.get("text_color", Qt.white)),
+                redline_color=_qcolor(item.get("redline_color", Qt.red)),
+                font_size=int(item.get("font_size", 14)),
+                max_val=float(item.get("max_val", 100.0)),
+                redline=item.get("redline", None),
+                thickness=int(item.get("thickness", 24)),
+                horizontal=bool(item.get("horizontal", True)),
+                tick_step=float(item.get("tick_step", 10)),
+                minor_per_major=int(item.get("minor_per_major", 4)),
+                corner_radius=int(item.get("corner_radius", 8)),
+                channel=item.get("channel"),
+                scale=float(item.get("scale", 1.0)),
+                offset=float(item.get("offset", 0.0)),
+                padding=int(item.get("padding", 0)),
+                track_align=item.get("track_align", "center"),
+                parent=parent
+            )
+
+        # ----- GEAR -----
+        elif t == "gear":
+            e = GearElement(
+                x, y, w, h, bool(item.get("centered", True)),
+                channel=item.get("channel", "gear"),
+                color=_qcolor(item.get("color", "white")),
+                bg_color=_qcolor(item.get("bg_color", "black")),
+                font_family=item.get("font_family", "DejaVu Sans"),
+                font_px=int(item.get("font_px", 72)),
+                bold=bool(item.get("bold", True)),
+                italic=bool(item.get("italic", False)),
+                align=_align(item.get("align", "center")),
+                wrap=bool(item.get("wrap", False)),
+                parent=parent
+            )
+
+        # ----- IMAGE -----
+        elif t == "image":
+            e = ImageElement(
+                x=x, y=y, width=w, height=h, centered=centered,
+                path=item.get("path", ""),
+                mode=item.get("mode", "contain"),
+                align=item.get("align", "center"),
+                opacity=float(item.get("opacity", 1.0)),
+                rotation=float(item.get("rotation", 0.0)),
+                bg_color=item.get("bg_color", "transparent"),
+                parent=parent
+            )
+
+        # ----- READOUT -----
+        elif t == "readout":
+            e = Readout(
+                x=x, y=y, width=w, height=h, centered=centered,
+                label=item.get("label", "LABEL"),
+                channel=item.get("channel"),
+                fmt=item.get("fmt", "{value}"),
+                units=item.get("units", ""),
+                scale=float(item.get("scale", 1.0)),
+                offset=float(item.get("offset", 0.0)),
+                label_color=item.get("label_color", "#9aa0a6"),
+                value_color=item.get("value_color", "#ffffff"),
+                bg_color=item.get("bg_color", "transparent"),
+                label_font_family=item.get("label_font_family", "DejaVu Sans"),
+                value_font_family=item.get("value_font_family", "DejaVu Sans"),
+                label_font_px=int(item.get("label_font_px", 18)),
+                value_font_px=int(item.get("value_font_px", 42)),
+                label_bold=bool(item.get("label_bold", True)),
+                value_bold=bool(item.get("value_bold", True)),
+                label_italic=bool(item.get("label_italic", False)),
+                value_italic=bool(item.get("value_italic", False)),
+                align=item.get("align", "center"),
+                padding=int(item.get("padding", 8)),
+                spacing=int(item.get("spacing", 4)),
+                label_ratio=float(item.get("label_ratio", 0.40)),
+                parent=parent
+            )
+
+        # ----- GEOMETRY -----
+        elif t == "geometry":
+            e = GeometryElement(
+                x=x, y=y, width=w, height=h, centered=centered,
+                shape=item.get("shape", "rect"),
+                fill_color=item.get("fill_color", "transparent"),
+                stroke_color=item.get("stroke_color", "white"),
+                stroke_width=float(item.get("stroke_width", 2.0)),
+                corner_radius=float(item.get("corner_radius", 12.0)),
+                start_angle=float(item.get("start_angle", 0.0)),
+                span_angle=float(item.get("span_angle", 360.0)),
+                ring_width=item.get("ring_width", None),
+                line_dir=item.get("line_dir", "h"),
+                rotation=float(item.get("rotation", 0.0)),
+                opacity=float(item.get("opacity", 1.0)),
+                channel=item.get("channel"),
+                scale=float(item.get("scale", 1.0)),
+                offset=float(item.get("offset", 0.0)),
+                max_val=float(item.get("max_val", 1.0)),
+                bg_color=item.get("bg_color", "transparent"),
+                parent=parent
+            )
+
+        else:
+            print(f"[parser] Unknown element type: {t}")
+            return None
+
+        # Common post-creation for non-group widgets
+        e.setVisible(bool(item.get("visible", True)))
+        e.set_visible_when(item.get("visible_when", None))
+        e.show()
+        return e
+

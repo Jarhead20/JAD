@@ -24,6 +24,9 @@ class Page(QWidget):
             vis = getattr(e, "evaluate_visibility", None)
             if vis: 
                 vis(store)
+            prop = getattr(e, "propagate_tick", None)
+            if prop: 
+                prop(store)
 
     def elements(self):
         return self._elist.get_elements()

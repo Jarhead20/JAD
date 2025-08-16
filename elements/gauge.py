@@ -184,6 +184,8 @@ class LinearGauge(GaugeBase):
                  tick_step=10,            # major tick every 10 units
                  minor_per_major=4,
                  corner_radius=8,
+                 padding=0,                
+                 track_align="center",
                  **kwargs):
         super().__init__(**kwargs)
         self._thickness = thickness
@@ -191,24 +193,26 @@ class LinearGauge(GaugeBase):
         self._tick_step = float(tick_step)
         self._minor_per_major = int(minor_per_major)
         self._corner_radius = corner_radius
+        self._padding = int(padding) 
+        self._track_align = str(track_align).lower()
 
     def _paint(self, p: QPainter):
-        rect = self.rect().adjusted(16, 16, -16, -16)  # padding inside widget
+        rect = self.rect().adjusted(self._padding, self._padding, -self._padding, -self._padding)
         track_h = self._thickness
-        if self._horizontal:
-            # Track background line
-            y = rect.center().y()
-            x0, x1 = rect.left(), rect.right()
-            pen = QPen(self._track_color, track_h)
-            pen.setCapStyle(Qt.RoundCap); p.setPen(pen)
-            p.drawLine(x0, y, x1, y)
+        cap = track_h / 2.0
 
-            # Value bar
+        if self._horizontal:
+            y = rect.center().y()
+            x0 = rect.left()  + cap
+            x1 = rect.right() - cap
+
+            pen = QPen(self._track_color, track_h); pen.setCapStyle(Qt.RoundCap); p.setPen(pen)
+            p.drawLine(int(x0), int(y), int(x1), int(y))
+
             pen.setColor(self._redline_color if self._value >= self._redline else self._bar_color)
             p.setPen(pen)
             xv = x0 + (x1 - x0) * self._ratio()
-            p.drawLine(x0, y, int(xv), y)
-
+            p.drawLine(int(x0), int(y), int(xv), int(y))
             # Ticks & labels
             p.setPen(QPen(self._text_color, 1.5))
             font = QFont("DejaVu Sans", max(8, int(self._thickness * 0.5)))
@@ -244,15 +248,23 @@ class LinearGauge(GaugeBase):
 
         else:
             # Vertical: same idea, swap axes
-            x = rect.center().x()
-            y0, y1 = rect.bottom(), rect.top()
+            if self._track_align == "left":
+                x = rect.left()  + cap
+            elif self._track_align == "right":
+                x = rect.right() - cap
+            else:
+                x = rect.center().x()
+
+            y0 = rect.bottom() - cap
+            y1 = rect.top()    + cap
+
             pen = QPen(self._track_color, track_h); pen.setCapStyle(Qt.RoundCap); p.setPen(pen)
-            p.drawLine(x, y0, x, y1)
+            p.drawLine(int(x), int(y0), int(x), int(y1))
 
             pen.setColor(self._redline_color if self._value >= self._redline else self._bar_color)
             p.setPen(pen)
             yv = y0 - (y0 - y1) * self._ratio()
-            p.drawLine(x, y0, x, int(yv))
+            p.drawLine(int(x), int(y0), int(x), int(yv))
 
             p.setPen(QPen(self._text_color, 1.5))
             font = QFont("DejaVu Sans", max(8, int(self._thickness * 0.5)))
@@ -272,7 +284,9 @@ class LinearGauge(GaugeBase):
                         ym = y0 - (y0 - y1) * tm
                         p.drawLine(int(x - track_h/2 - 6), int(ym), int(x - track_h/2 - 6 - 6), int(ym))
                 v += major
-            p.setPen(self._text_color)
-            p.setFont(QFont("DejaVu Sans", max(10, int(self._thickness * 0.6))))
-            p.drawText(rect.adjusted(int(track_h*0.8), 0, 0, 0), Qt.AlignLeft | Qt.AlignVCenter,
-                       f"{self._label}: {self._value:.1f}")
+           
+            if self._label != "":
+                p.setPen(self._text_color)
+                p.setFont(QFont("DejaVu Sans", max(10, int(self._thickness * 0.6))))
+                p.drawText(rect.adjusted(int(track_h*0.8), 0, 0, 0), Qt.AlignLeft | Qt.AlignVCenter,
+                        f"{self._label}: {self._value:.1f}")
