@@ -28,20 +28,6 @@
       "text": "JAD",               
       "fmt": "{value}",               
       "font_px": 72, "bold": true
-    },
-    {
-      "type": "gear",
-      "x": 512,
-      "y": 300,
-      "width": 200,
-      "height": 200,
-      "centered": true,
-      "channel": "gear",
-      "font_px": 120,
-      "bold": true,
-      "color": "white",
-      "bg_color": "black",
-      "align": "center"
     }
   ]
 }

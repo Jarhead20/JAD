@@ -141,6 +141,7 @@ class ElementList:
 
             e.setParent(parent); e.show()
             self._elements.append(e)
+        return data.get("page", {})
 
     # --- transforms: derive channels from other channels ---
     def _setup_channel_transforms(self, spec: dict):

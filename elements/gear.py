@@ -67,6 +67,7 @@ class GearElement(TextElement):
             return
         val = store.get(self._channel, None)
         label = self.map_gear(val)
+
         # Only update if it changed (avoids extra repaints)
         if label != getattr(self, "_last_label", None):
             self._last_label = label
