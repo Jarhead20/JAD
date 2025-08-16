@@ -38,7 +38,11 @@
       "align": "center",
       "opacity": 1.0,
       "rotation": 0,
-      "bg_color": "transparent"
+      "bg_color": "transparent",
+      "visible_when": {
+        "when": { "ch": "rpm", ">=": 1000 },
+        "latch": false
+      }
     }
   ]
 }

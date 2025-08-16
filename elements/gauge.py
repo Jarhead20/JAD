@@ -221,7 +221,10 @@ class LinearGauge(GaugeBase):
                 # major tick
                 p.drawLine(int(xt), int(y + track_h/2 + 6), int(xt), int(y + track_h/2 + 6 + 10))
                 # label
-                p.drawText(int(xt - 12), int(y + track_h/2 + 6 + 22), f"{int(v)}")
+                if v < 1:
+                    p.drawText(int(xt - 12), int(y + track_h/2 + 6 + 22), f"{v}")
+                else:
+                    p.drawText(int(xt - 12), int(y + track_h/2 + 6 + 22), f"{int(v)}")
                 # minors
                 if v + major <= self._max_val and self._minor_per_major > 1:
                     step = major / self._minor_per_major

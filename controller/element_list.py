@@ -8,6 +8,8 @@ from elements.gauge import RoundGauge, LinearGauge
 from elements.text import TextElement
 from elements.gear import GearElement
 from elements.image import ImageElement
+from elements.readout import Readout
+from elements.geometry import GeometryElement
 
 def _qcolor(c):
     if isinstance(c, QColor): return c
@@ -150,11 +152,73 @@ class ElementList:
                 )
                 e.show()
                 self._elements.append(e)
+            elif t == "readout":
+                e = Readout(
+                    x=x, y=y, width=w, height=h,
+                    centered=centered,
+                    label=item.get("label", "LABEL"),
+                    channel=item.get("channel"),
+                    fmt=item.get("fmt", "{value}"),
+                    units=item.get("units", ""),
+                    scale=float(item.get("scale", 1.0)),
+                    offset=float(item.get("offset", 0.0)),
+                    label_color=item.get("label_color", "#9aa0a6"),
+                    value_color=item.get("value_color", "#ffffff"),
+                    bg_color=item.get("bg_color", "transparent"),
+                    label_font_family=item.get("label_font_family", "DejaVu Sans"),
+                    value_font_family=item.get("value_font_family", "DejaVu Sans"),
+                    label_font_px=int(item.get("label_font_px", 18)),
+                    value_font_px=int(item.get("value_font_px", 42)),
+                    label_bold=bool(item.get("label_bold", True)),
+                    value_bold=bool(item.get("value_bold", True)),
+                    label_italic=bool(item.get("label_italic", False)),
+                    value_italic=bool(item.get("value_italic", False)),
+                    align=item.get("align", "center"),
+                    padding=int(item.get("padding", 8)),
+                    spacing=int(item.get("spacing", 4)),
+                    label_ratio=float(item.get("label_ratio", 0.40)),
+                    parent=parent
+                )
+                # common post-creation bits
+                e.setVisible(bool(item.get("visible", True)))
+                e.set_visible_when(item.get("visible_when", None))
+                e.show()
+                self._elements.append(e)
+            elif t == "geometry":
+                e = GeometryElement(
+                    x=x, y=y, width=w, height=h,
+                    centered=centered,
+                    shape=item.get("shape", "rect"),
+                    fill_color=item.get("fill_color", "transparent"),
+                    stroke_color=item.get("stroke_color", "white"),
+                    stroke_width=float(item.get("stroke_width", 2.0)),
+                    corner_radius=float(item.get("corner_radius", 12.0)),
+                    start_angle=float(item.get("start_angle", 0.0)),
+                    span_angle=float(item.get("span_angle", 360.0)),
+                    ring_width=item.get("ring_width", None),
+                    line_dir=item.get("line_dir", "h"),
+                    rotation=float(item.get("rotation", 0.0)),
+                    opacity=float(item.get("opacity", 1.0)),
+                    # channels (optional; for ring/arc progress)
+                    channel=item.get("channel"),
+                    scale=float(item.get("scale", 1.0)),
+                    offset=float(item.get("offset", 0.0)),
+                    max_val=float(item.get("max_val", 1.0)),
+                    bg_color=item.get("bg_color", "transparent"),
+                    parent=parent
+                )
+                e.setVisible(bool(item.get("visible", True)))
+                e.set_visible_when(item.get("visible_when"))
+                e.show()
+                self._elements.append(e)
             else:
                 print(f"[parser] Unknown element type: {t}")
                 continue
 
-            e.setParent(parent); e.show()
+            e.setParent(parent)
+            e.setVisible(bool(item.get("visible", True)))
+            e.set_visible_when(item.get("visible_when", None))
+            e.show()
             self._elements.append(e)
         return data.get("page", {})
 

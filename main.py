@@ -67,15 +67,25 @@ if __name__ == "__main__":
                 fuel_l = msg.get("fuel_l", 0.0)
                 cap = msg.get("fuel_capacity_l", 0.0)
                 fuel_pct = (fuel_l / cap) if cap else 0.0
-                channels.update({
+                wear = msg.get("tyre_wear", [None, None, None, None])
+                # Assume [FL, FR, RL, RR]
+                ch = {
                     "rpm": msg.get("rpm", 0),
-                    "rpm_k": msg.get("rpm", 0) / 1000.0,
-                    "fuel_l": fuel_l,
-                    "fuel_pct": fuel_pct,
+                    "rpm_k": msg.get("rpm", 0)/1000.0,
+                    "fuel_l": msg.get("fuel_l", 0.0),
+                    "fuel_pct": (msg.get("fuel_l", 0.0) / msg.get("fuel_capacity_l", 0.0)) if msg.get("fuel_capacity_l") else 0.0,
                     "gear": msg.get("gear", 0),
-                    "max_rpm": msg.get("max_rpm", 0),
-                    "fuel_capacity_l": cap,
-                })
+                    "speed": msg.get("speed", 0.0)/3.6,
+                    # Tyre wear raw values
+                    "tyre_wear_fl": wear[0]/100,
+                    "tyre_wear_fr": wear[1]/100,
+                    "tyre_wear_rl": wear[2]/100,
+                    "tyre_wear_rr": wear[3]/100,
+                    "brake": msg.get("brake", 0.0),
+                    "gas": msg.get("gas", 0.0),
+                }
+                channels.update(ch)
+
             except Exception as e:
                 print("bad packet:", e)
 

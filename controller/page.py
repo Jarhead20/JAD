@@ -21,6 +21,9 @@ class Page(QWidget):
             upd = getattr(e, "update_val", None)
             if upd:
                 upd(store)
+            vis = getattr(e, "evaluate_visibility", None)
+            if vis: 
+                vis(store)
 
     def elements(self):
         return self._elist.get_elements()

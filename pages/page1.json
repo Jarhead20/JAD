@@ -9,6 +9,17 @@
   },
   "elements": [
     {
+      "type": "geometry",
+      "shape": "rect",
+      "x": 0, "y": 500, "width": 1024, "height": 100,
+      "centered": false,
+      "fill_color": "#1e1f24",
+      "stroke_color": "#343842",
+      "stroke_width": 2,
+      "bg_color": "transparent",
+      "rotation": 0
+    },
+    {
       "type": "round_gauge",
       "x": 170, "y": 380, "width": 320, "height": 320, "centered": true,
       "label": "RPM x1000", "font_size": 20,
@@ -20,6 +31,8 @@
       "x": 780, "y": 420, "width": 220, "height": 120, "centered": false,
       "label": "Fuel", "font_size": 18,
       "max_val": 1.0,
+      "redline": 2.0,
+      "tick_step":0.5,
       "channel": "fuel_pct"
     },
     {
@@ -42,6 +55,61 @@
       "color": "white",
       "bg_color": "black",
       "align": "center"
+    },
+    {
+    "type": "readout",
+    "x": 1120, "y": 120, "width": 260, "height": 140,
+    "centered": true,
+    "label": "SPEED",
+    "channel": "speed_kmh",
+    "fmt": "{value:.0f}",
+    "units": " km/h",
+    "label_color": "#8a8f98",
+    "value_color": "#ffffff",
+    "bg_color": "transparent",
+    "label_font_px": 18,
+    "value_font_px": 64
+    },
+    { 
+      "type":"linear_gauge","x":10,"y":10,"width":30,"height":60,"centered":false,
+      "label":"FL","max_val":1,"channel":"tyre_wear_fl","bg_color":"transparent", "redline": 2.0, "horizontal": false
+    },
+    { 
+      "type":"linear_gauge","x":10,"y":100,"width":30,"height":60,"centered":false,
+      "label":"FR","max_val":1,"channel":"tyre_wear_fr","bg_color":"transparent", "redline": 2.0, "horizontal": false
+    },
+    { 
+      "type":"linear_gauge","x":80,"y":10,"width":30,"height":60,"centered":false,
+      "label":"RL","max_val":1,"channel":"tyre_wear_rl","bg_color":"transparent", "redline": 2.0, "horizontal": false
+    },
+    { 
+      "type":"linear_gauge","x":80,"y":100,"width":30,"height":60,"centered":false,
+      "label":"RR","max_val":1,"channel":"tyre_wear_rr","bg_color":"transparent", "redline": 2.0, "horizontal": false
+    },
+    {
+      "type": "readout",
+      "x": 800, "y": 70, "width": 260, "height": 140,
+      "centered": true,
+      "label": "SPEED",
+      "channel": "speed",
+      "scale": 3.6,
+      "fmt": "{value:.0f}",
+      "units": " km/h",
+      "label_color": "#9aa0a6",
+      "value_color": "#ffffff",
+      "bg_color": "transparent",
+      "label_font_px": 18,
+      "value_font_px": 20,
+      "align": "center"
+    },
+    { 
+      "type":"linear_gauge","x":980,"y":10,"width":30,"height":120,"centered":false,
+      "label":"Brake","max_val":1,"channel":"brake","bg_color":"transparent", "redline": 2.0, "horizontal": false
+    },
+    { 
+      "type":"linear_gauge","x":920,"y":10,"width":30,"height":120,"centered":false,
+      "label":"Gas","max_val":1,"channel":"gas","bg_color":"transparent", "redline": 2.0, "horizontal": false
     }
+
   ]
 }
