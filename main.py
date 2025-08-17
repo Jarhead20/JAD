@@ -1,6 +1,7 @@
 import os, sys, json, signal, time
 from pathlib import Path
 from PySide6.QtCore import Qt, QTimer, QFileSystemWatcher, QTimer
+from PySide6.QtGui import QGuiApplication, QKeySequence
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PySide6.QtNetwork import QUdpSocket, QHostAddress
 import glob
@@ -34,6 +35,23 @@ def _resolve_path(p: str) -> str:
     if not q.is_absolute():
         q = APP_ROOT / q
     return str(q)
+
+    
+SS_DIR = Path("/home/jad/JAD/screenshots")
+SS_DIR.mkdir(parents=True, exist_ok=True)
+
+def capture_screenshot(widget, whole_screen=False):
+    ts = time.strftime("%Y%m%d_%H%M%S")
+    path = SS_DIR / f"screenshot_{ts}.png"
+
+    if whole_screen:
+        screen = QGuiApplication.primaryScreen()
+        pm = screen.grabWindow(0)                     # entire display :0
+    else:
+        pm = widget.grab()                            # just this window
+
+    ok = pm.save(str(path), "PNG")
+    print(f"[shot] saved: {path}" if ok else "[shot] failed")
 
 
 
@@ -92,6 +110,7 @@ if __name__ == "__main__":
     buttons.button("prev").clicked.connect(cycler.prev_page)
 
     buttons.button("C").clicked.connect(QApplication.quit)
+    # buttons.button("B").clicked.connect(lambda: capture_screenshot(root))
 
     sl = ShiftLights(PINS, mode="bar",active_high=True, flash_at=0.95, flash_hz=8.0)
 

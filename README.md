@@ -2,6 +2,8 @@
 
 A lightweight, **1024×600** Qt dashboard for a Raspberry Pi 5 that renders gauges/text/images, reads live telemetry from Assetto Corsa (via UDP), and supports GPIO buttons + shift lights.
 
+![Dashboard screenshot](screenshots/screenshot_20250817_043506.png)
+
 ---
 
 ## Features (quick)
