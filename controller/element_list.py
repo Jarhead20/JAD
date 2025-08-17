@@ -11,6 +11,8 @@ from elements.image import ImageElement
 from elements.readout import Readout
 from elements.geometry import GeometryElement
 from elements.group import Group
+from elements.gg import GGDiagram
+from elements.image_gauge import ImageGauge
 
 def _qcolor(c):
     if isinstance(c, QColor): return c
@@ -287,6 +289,52 @@ class ElementList:
                 offset=float(item.get("offset", 0.0)),
                 max_val=float(item.get("max_val", 1.0)),
                 bg_color=item.get("bg_color", "transparent"),
+                parent=parent
+            )
+
+        elif t in ("gg", "gg_diagram"):
+            e = GGDiagram(
+                x, y, w, h, centered,
+                bg_color=_qcolor(item.get("bg_color", "transparent")),
+                lat_ch=item.get("lat_ch", "acc_lat_g"),
+                long_ch=item.get("long_ch", "acc_long_g"),
+                radius_g=float(item.get("radius_g", 2.5)),
+                padding=int(item.get("padding", 10)),
+                rings=int(item.get("rings", 4)),
+                show_square=bool(item.get("show_square", False)),
+                show_labels=bool(item.get("show_labels", True)),
+                grid_color=item.get("grid_color", "#2b2f36"),
+                axis_color=item.get("axis_color", "#8a8f98"),
+                trail_color=item.get("trail_color", "#2fc1ff"),
+                point_color=item.get("point_color", "#ffffff"),
+                point_radius_px=int(item.get("point_radius_px", 5)),
+                trail_len=int(item.get("trail_len", 240)),
+                ema=item.get("ema", 0.2),
+                invert_lat=bool(item.get("invert_lat", False)),
+                invert_long=bool(item.get("invert_long", False)),
+                parent=parent
+            )
+
+        elif t in ("image_gauge", "tinted_image"):
+            e = ImageGauge(
+                x, y, w, h, centered,
+                path=item.get("path", ""),
+                channel=item.get("channel"),
+                min_color=item.get("min_color", "#18c964"),
+                mid_color=item.get("mid_color"),            # optional
+                max_color=item.get("max_color", "#ff3b30"),
+                invert=bool(item.get("invert", False)),
+                mode=item.get("mode", "contain"),
+                align=item.get("align", "center"),
+                opacity=float(item.get("opacity", 1.0)),
+                rotation=float(item.get("rotation", 0.0)),
+                scale=float(item.get("scale", 1.0)),
+                offset=float(item.get("offset", 0.0)),
+                ema=item.get("ema", None),
+                bg_color=item.get("bg_color", "transparent"),
+                black_point=float(item.get("black_point", 0.15)),
+                white_point=float(item.get("white_point", 0.95)),
+                gamma=float(item.get("gamma", 1.0)),
                 parent=parent
             )
 

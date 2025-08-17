@@ -43,29 +43,81 @@
             "label_font_px":1,"value_font_px":36,"align":"center" }
         ]
     },
+    {
+        "type": "group",
+        "x": 190, "y": 225, "width": 460, "height": 300,
+        "centered": true,
+        "bg_color": "transparent",
+        "children": [
+            { "type":"geometry","shape":"round_rect","x":220,"y":125,"width":330,"height":200,"centered":true,
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            
+            { "type":"text","x":220,"y":50,"width":360,"height":28,"centered":true,
+            "text":"DAMAGE","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
+            {
+            "type": "image_gauge",
+            "x": 220, "y": 150, "width": 260, "height": 128,
+            "centered": true,
+            "path": "assets/lotus.png",          
+            "channel": "car_damage_avg",            
+            "min_color": "#18c964",                
+            "mid_color": "#ffd400",                 
+            "max_color": "#ff3b30",                
+            "invert": false,                        
+            "mode": "contain",
+            "align": "center",
+            "opacity": 1.0,
+            "rotation": 0,
+            "bg_color": "transparent",
+            "ema": 0.2,
+            "black_point": 0.15,  
+            "white_point": 0.95,
+            "gamma": 1.0
+          }
+        ]
+    },
+    {
+        "type": "group",
+        "x": 190, "y": 450, "width": 460, "height": 300,
+        "centered": true,
+        "bg_color": "transparent",
+        "children": [
+            { "type":"geometry","shape":"round_rect","x":220,"y":153,"width":330,"height":286,"centered":true,
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
 
-    { "type":"geometry","shape":"round_rect","x":180,"y":320,"width":260,"height":300,"centered":true,
-      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            {
+              "type": "gg",
+              "x": 220,
+              "y": 153,
+              "width": 280,
+              "height": 280,
+              "centered": true,
+              "bg_color": "transparent",
 
-    { "type":"readout","x":180,"y":360,"width":220,"height":40,"centered":true,
-      "label":"Oil temp","channel":"oil_c","fmt":"{value:.1f}","units":" °C",
-      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
-      "label_font_px":16,"value_font_px":24,"align":"right" },
+              "lat_ch": "acc_lat_g",
+              "long_ch": "acc_long_g",
+              "radius_g": 2.5,
+              "rings": 5,
+              "show_square": false,
+              "show_labels": true,
 
-    { "type":"readout","x":180,"y":400,"width":220,"height":40,"centered":true,
-      "label":"Oil press","channel":"oil_press","fmt":"{value:.1f}","units":" bar",
-      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
-      "label_font_px":16,"value_font_px":24,"align":"right" },
+              "grid_color": "#2b2f36",
+              "axis_color": "#8a8f98",
+              "trail_color": "#2fc1ff",
+              "point_color": "#ffffff",
+              "point_radius_px": 5,
+              "trail_len": 240,
+              "ema": 0.2,
 
-    { "type":"readout","x":180,"y":440,"width":220,"height":40,"centered":true,
-      "label":"Water temp","channel":"water_c","fmt":"{value:.1f}","units":" °C",
-      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
-      "label_font_px":16,"value_font_px":24,"align":"right" },
+              "invert_lat": true,
+              "invert_long": false
+            }
+        ]
+    },
 
-    { "type":"readout","x":180,"y":480,"width":220,"height":40,"centered":true,
-      "label":"Water press","channel":"water_press","fmt":"{value:.1f}","units":" bar",
-      "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
-      "label_font_px":16,"value_font_px":24,"align":"right" },
+    
+
+    
 
     { "type":"geometry","shape":"round_rect","x":780,"y":330,"width":260,"height":200,"centered":false,
       "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
@@ -111,7 +163,7 @@
     "bg_color": "transparent",
     "children": [
 
-        { "type":"geometry","shape":"round_rect","x":230,"y":100,"width":360,"height":180,"centered":true,
+        { "type":"geometry","shape":"round_rect","x":230,"y":98,"width":300,"height":176,"centered":true,
         "corner_radius":12,"fill_color":"#15181e","stroke_color":"#f5a623","stroke_width":2,"bg_color":"transparent" },
 
         { "type":"text","x":230,"y":30,"width":360,"height":28,"centered":true,
@@ -133,53 +185,53 @@
         "type":"linear_gauge","x":200,"y":80,"width":30,"height":60,"centered":true,
         "label":"","max_val":1,"channel":"tyre_wear_fl",
         "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center"
+        "padding": 0, "track_align": "center", "redline":2.0
         },
         {
         "type":"linear_gauge","x":260,"y":80,"width":30,"height":60,"centered":true,
         "label":"","max_val":1,"channel":"tyre_wear_fr",
         "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center"
+        "padding": 0, "track_align": "center", "redline":2.0
         },
         {
         "type":"linear_gauge","x":200,"y":150,"width":30,"height":60,"centered":true,
         "label":"","max_val":1,"channel":"tyre_wear_rl",
         "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center"
+        "padding": 0, "track_align": "center", "redline":2.0
         },
         {
         "type":"linear_gauge","x":260,"y":150,"width":30,"height":60,"centered":true,
         "label":"","max_val":1,"channel":"tyre_wear_rr",
         "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center"
+        "padding": 0, "track_align": "center", "redline":2.0
         },
         { "type": "readout",
-        "x": 140, "y": 80, "width": 70, "height": 50, "centered": true,
+        "x": 130, "y": 80, "width": 120, "height": 50, "centered": true,
         "label": "FL", "channel": "wheel_pressure_fl",
         "fmt": "{value:.1f}", "units": " psi",
         "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 20 },
+        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 },
 
         { "type": "readout",
-        "x": 320, "y": 80, "width": 70, "height": 50, "centered": true,
+        "x": 330, "y": 80, "width": 120, "height": 50, "centered": true,
         "label": "FR", "channel": "wheel_pressure_fr",
         "fmt": "{value:.1f}", "units": " psi",
         "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 20 },
+        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 },
 
         { "type": "readout",
-        "x": 140, "y": 150, "width": 70, "height": 50, "centered": true,
+        "x": 130, "y": 150, "width": 120, "height": 50, "centered": true,
         "label": "RL", "channel": "wheel_pressure_rl",
         "fmt": "{value:.1f}", "units": " psi",
         "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 20 },
+        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 },
 
         { "type": "readout",
-        "x": 320, "y": 150, "width": 70, "height": 50, "centered": true,
+        "x": 330, "y": 150, "width": 120, "height": 50, "centered": true,
         "label": "RR", "channel": "wheel_pressure_rr",
         "fmt": "{value:.1f}", "units": " psi",
         "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 20 }
+        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 }
     ]
     },
 
@@ -193,5 +245,9 @@
       "label":"","channel":"brake_bias","fmt":"{value:.0f}","units":"",
       "label_color":"#cbd1d6","value_color":"#ffffff","bg_color":"transparent",
       "label_font_px":1,"value_font_px":28,"align":"left" }
+
+
+    
+
   ]
 }

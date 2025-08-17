@@ -133,37 +133,61 @@ if __name__ == "__main__":
                 msg = json.loads(payload.decode("utf-8"))
                 fuel_l = msg.get("fuel_l", 0.0)
                 cap = msg.get("fuel_capacity_l", 0.0)
-                fuel_pct = (fuel_l / cap) if cap else 0.0
                 wear = msg.get("tyre_wear", [None, None, None, None])
                 pres = msg.get("tyre_pres", [None, None, None, None])
-                # Assume [FL, FR, RL, RR]
+
+                # NEW: acceleration (lat/long) in g
+                acc = msg.get("accG") or [msg.get("acc_long_g", 0.0), msg.get("acc_lat_g", 0.0), 0.0]
+                try:
+                    gx, gy = float(acc[0]), float(acc[2])
+                except Exception:
+                    gx = gy = 0.0
+
+                dmg = msg.get("car_damage", [0, 0, 0, 0, 0])
+                try:
+                    dmg = [float(d/100 or 0.0) for d in dmg]
+                except Exception:
+                    dmg = [0.0, 0.0, 0.0, 0.0, 0.0]
+
                 ch = {
                     "rpm": msg.get("rpm", 0),
-                    "rpm_k": msg.get("rpm", 0)/1000.0,
-                    "fuel_l": msg.get("fuel_l", 0.0),
-                    "fuel_pct": (msg.get("fuel_l", 0.0) / msg.get("fuel_capacity_l", 0.0)) if msg.get("fuel_capacity_l") else 0.0,
+                    "rpm_k": msg.get("rpm", 0) / 1000.0,
+                    "fuel_l": fuel_l,
+                    "fuel_pct": (fuel_l / cap) if cap else 0.0,
                     "gear": msg.get("gear", 0),
                     "speed": msg.get("speed", 0.0),
-                    # Tyre wear raw values
-                    "tyre_wear_fl": wear[0]/100,
-                    "tyre_wear_fr": wear[1]/100,
-                    "tyre_wear_rl": wear[2]/100,
-                    "tyre_wear_rr": wear[3]/100,
-                    "wheel_pressure_fl": pres[0]/100,
-                    "wheel_pressure_fr": pres[1]/100,
-                    "wheel_pressure_rl": pres[2]/100,
-                    "wheel_pressure_rr": pres[3]/100,
+
+                    "tyre_wear_fl": (wear[0] or 0)/100,
+                    "tyre_wear_fr": (wear[1] or 0)/100,
+                    "tyre_wear_rl": (wear[2] or 0)/100,
+                    "tyre_wear_rr": (wear[3] or 0)/100,
+                    "wheel_pressure_fl": pres[0],
+                    "wheel_pressure_fr": pres[1],
+                    "wheel_pressure_rl": pres[2],
+                    "wheel_pressure_rr": pres[3],
                     "brake": msg.get("brake", 0.0),
                     "gas": msg.get("gas", 0.0),
+
+                    # NEW: channels for GG element
+                    "acc_long_g": gx,
+                    "acc_lat_g":  gy,
+                    "car_damage": dmg,
+                    "car_damage_0": dmg[0],
+                    "car_damage_1": dmg[1],
+                    "car_damage_2": dmg[2],
+                    "car_damage_3": dmg[3],
+                    "car_damage_4": dmg[4],
+                    "car_damage_max": max(dmg),
+                    "car_damage_avg": max(dmg)/5.0,
                 }
                 channels.update(ch)
 
-                # inside on_ready() after parsing msg
+                
+
                 rpm = msg.get("rpms") or msg.get("rpm") or 0
                 max_rpm = msg.get("max_rpm", 9000)
-                min_rpm = int(0.60 * max_rpm)  # lights start at 60% of redline
+                min_rpm = int(0.60 * max_rpm)
                 sl.update_rpm(rpm, min_rpm=min_rpm, max_rpm=max_rpm)
-
 
             except Exception as e:
                 print("bad packet:", e)

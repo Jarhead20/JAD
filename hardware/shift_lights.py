@@ -79,32 +79,36 @@ class ShiftLights:
         for off, on in zip(self.pins, new_states):
             self._states[off] = on
 
-    # --- public API ---
     def update_ratio(self, ratio: float):
         """
-        Update lights based on a normalized ratio 0..1 (e.g., rpm/max_rpm).
+        Update lights from a 0..1 ratio.
+        Normal:
+        - 'bar': fill up to threshold
+        - 'dot': highest reached LED only
+        Flash mode (r >= flash_at and flash_hz > 0):
+        - ALL LEDs flash together; during the on phase, ALL are ON.
         """
         r = max(0.0, min(1.0, float(ratio)))
 
-        # Optional flash above threshold
-        if self.flash_at is not None and r >= self.flash_at and self.flash_hz > 0:
-            phase = int(time.monotonic() * self.flash_hz * 2.0) & 1  # 0/1 toggle
-            blink_on = (phase == 1)
-        else:
-            blink_on = True
+        flashing = (self.flash_at is not None and r >= self.flash_at and self.flash_hz > 0)
+        if flashing:
+            blink_on = (int(time.monotonic() * self.flash_hz * 2.0) & 1) == 1
+            states = [bool(blink_on)] * self.N   # all on during on-phase, all off during off-phase
+            self._apply_states(states)
+            return
 
+        # --- normal (non-flash) behavior ---
         if self.mode == "bar":
-            # Light every LED whose threshold <= r
-            states = [(r >= thr) and blink_on for thr in self.thresholds]
+            states = [r >= thr for thr in self.thresholds]
         else:  # 'dot'
-            # Light only the highest LED reached
             idx = -1
             for i, thr in enumerate(self.thresholds):
                 if r >= thr:
                     idx = i
-            states = [(i == idx) and blink_on for i in range(self.N)]
+            states = [(i == idx) for i in range(self.N)]
 
         self._apply_states(states)
+
 
     def update_rpm(self, rpm: float, *, min_rpm: float, max_rpm: float):
         """
