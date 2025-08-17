@@ -1,9 +1,32 @@
 # Windows sender (runs on your gaming PC)
 import mmap, ctypes, socket, json, time
 
-PI_IP = "172.20.10.15"
-PORT  = 5005
-sock  = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+class UDPSink:
+    def __init__(self, host: str, port: int, *, allow_broadcast=False):
+        self.host = host
+        self.port = port
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        if allow_broadcast:
+            self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        self.fail_count = 0
+        self._last_warn = 0.0
+
+    def send(self, payload: dict):
+        buf = json.dumps(payload).encode("utf-8")
+        try:
+            self.sock.sendto(buf, (self.host, self.port))
+            self.fail_count = 0
+        except OSError as e:
+            # Network unreachable, no route, etc. → don’t crash; back off a bit
+            self.fail_count += 1
+            # exponential backoff up to ~2s
+            delay = min(2.0, 0.05 * (2 ** min(self.fail_count, 6)))
+            now = time.monotonic()
+            if now - self._last_warn > 2.0:  # throttle logs
+                print(f"[UDP] send failed ({e}); will keep trying...")
+                self._last_warn = now
+            time.sleep(delay)  # brief pause to avoid busy-loop
+            # keep going (don’t re-raise)
 
 # --- Static page (unchanged) ---
 class SPageFileStatic(ctypes.Structure):
@@ -108,6 +131,10 @@ class SPageFilePhysics(ctypes.Structure):
 mm_phys = mmap.mmap(-1, ctypes.sizeof(SPageFilePhysics), tagname="acpmf_physics")
 phys = SPageFilePhysics.from_buffer(mm_phys)
 
+PI_IP = "172.20.10.15"
+PORT  = 5005
+udp = UDPSink(PI_IP, PORT)
+
 while True:
     # Read live values
     rpm     = int(phys.rpms)
@@ -151,11 +178,13 @@ while True:
     lap_best_ms = int(gfx.iBestTime)
     laps_done   = int(gfx.completedLaps)
 
+
     payload.update({
         "lap_current_ms": lap_cur_ms if lap_cur_ms >= 0 else 0,
         "lap_last_ms":    lap_last_ms if lap_last_ms >= 0 else 0,
         "lap_best_ms":    lap_best_ms if lap_best_ms >= 0 else 0,
         "laps_completed": laps_done
     })
-    sock.sendto(json.dumps(payload).encode("utf-8"), (PI_IP, PORT))
+    # sock.sendto(json.dumps(payload).encode("utf-8"), (PI_IP, PORT))
+    udp.send(payload)
     time.sleep(0.05)  # ~20 Hz
