@@ -42,7 +42,7 @@ A lightweight, **1024×600** Qt dashboard for a Raspberry Pi 5 that renders gaug
 * **Pi 5**
 * **Buttons**
 * **Shift lights**
-[7in display](https://www.waveshare.com/wiki/7inch_HDMI_LCD_(C))
+* [7in display](https://www.waveshare.com/wiki/7inch_HDMI_LCD_(C))
 
 ---
 
