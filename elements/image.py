@@ -84,8 +84,8 @@ class ImageElement(Element):
         self._svg: QSvgRenderer | None = None
         self._intrinsic_size = QSizeF(0, 0)
 
-        if path:
-            self.set_image(path)
+        if self._path:
+            self.set_image(self._path)
 
     # ----- public setters -----
     def set_image(self, path: str):
