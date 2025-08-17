@@ -66,8 +66,10 @@ if __name__ == "__main__":
     buttons = PageButtons(
         pins=[11, 9, 13, 26],                 # 4 buttons
         names=["next", "prev", "B", "C"],      # use whatever labels you like
-        active_low=True,                          # or [True,True,False,True,True]
+        active_low=True,                          
+        store=channels,
         debounce_ms=50,
+        prefix="btn_",
         parent=root
     )
 

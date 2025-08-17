@@ -43,6 +43,7 @@ class GGDiagram(Element):
                  ema: Optional[float] = None,
                  invert_lat: bool = False,
                  invert_long: bool = False,
+                 reset_channel=None,
                  parent: QWidget | None = None):
         super().__init__(x, y, width, height, centered, bg_color, parent)
 
@@ -67,6 +68,9 @@ class GGDiagram(Element):
         self._invert_lat = bool(invert_lat)
         self._invert_long = bool(invert_long)
 
+        self._reset_ch = reset_channel
+        self._reset_seen = None
+
         self._trail.append((0.0, 0.0))
 
         # render perf hint (opaque only if bg has alpha>0)
@@ -86,6 +90,13 @@ class GGDiagram(Element):
 
     # --- Element API: consume channels each tick ---
     def update_val(self, store):
+
+        if self._reset_ch:
+            token = store.get(self._reset_ch)
+            if token is not None and token != self._reset_seen:
+                self._reset_seen = token
+                self._trail.clear()
+                self._trail.append((0.0, 0.0))  # center seed
         lat = store.get(self._lat_ch)
         lon = store.get(self._long_ch)
         if lat is None or lon is None:

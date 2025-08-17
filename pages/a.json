@@ -110,7 +110,8 @@
               "ema": 0.2,
 
               "invert_lat": true,
-              "invert_long": false
+              "invert_long": false,
+              "reset_channel": "btn_B_click_ts"
             }
         ]
     },
@@ -154,11 +155,12 @@
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
         "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
 
-      
+      { "type":"text","x":230,"y":120,"width":360,"height":28,"centered":true,
+            "text":"FUEL","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
 
       {
       "type": "linear_gauge",
-      "x": 230, "y": 155, "width": 220, "height": 120, "centered": true,
+      "x": 230, "y": 160, "width": 220, "height": 50, "centered": true,
       "label": "Fuel", "font_size": 18,
       "max_val": 1.0,
       "redline": 2.0,
@@ -167,7 +169,7 @@
     },
     {
       "type": "image",
-      "x": 95, "y": 155, "width": 30, "height": 30,
+      "x": 95, "y": 160, "width": 30, "height": 30,
       "centered": true,
       "path": "assets/fuel.png",
       "mode": "contain",

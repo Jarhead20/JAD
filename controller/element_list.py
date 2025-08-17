@@ -312,6 +312,7 @@ class ElementList:
                 ema=item.get("ema", 0.2),
                 invert_lat=bool(item.get("invert_lat", False)),
                 invert_long=bool(item.get("invert_long", False)),
+                reset_channel=item.get("reset_channel"),
                 parent=parent
             )
 

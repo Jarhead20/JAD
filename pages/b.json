@@ -110,7 +110,8 @@
               "ema": 0.2,
 
               "invert_lat": true,
-              "invert_long": false
+              "invert_long": false,
+              "reset_channel": "btn_B_click_ts"
             }
         ]
     },
