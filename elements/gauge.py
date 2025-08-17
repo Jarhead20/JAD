@@ -174,7 +174,7 @@ class RoundGauge(GaugeBase):
                      self.rect().center().y() - inner_side/2,
                      inner_side, inner_side)
         p.drawText(ctr, Qt.AlignCenter | Qt.TextWordWrap,
-                   f"{self._label}\n{self._value:.1f}")
+                   f"{self._label}")
 
 # ---------- Linear gauge (horizontal by default) ----------
 class LinearGauge(GaugeBase):
@@ -289,4 +289,4 @@ class LinearGauge(GaugeBase):
                 p.setPen(self._text_color)
                 p.setFont(QFont("DejaVu Sans", max(10, int(self._thickness * 0.6))))
                 p.drawText(rect.adjusted(int(track_h*0.8), 0, 0, 0), Qt.AlignLeft | Qt.AlignVCenter,
-                        f"{self._label}")
+                        f"{self._label}: {self._value:.1f}")
