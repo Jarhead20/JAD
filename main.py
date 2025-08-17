@@ -211,7 +211,6 @@ if __name__ == "__main__":
                 lap_last_ms = int(msg.get("lap_last_ms", -1))
                 lap_best_ms = int(msg.get("lap_best_ms", -1))
                 laps_done   = int(msg.get("laps_completed", 0))
-                lap = int(msg.get("lap", 0))
 
                 ch = {
                     "rpm": msg.get("rpm", 0),
@@ -257,7 +256,7 @@ if __name__ == "__main__":
                     "lap_current_str": _ms_to_str(lap_cur_ms),
                     "lap_last_str":    _ms_to_str(lap_last_ms),
                     "lap_best_str":    _ms_to_str(lap_best_ms),
-                    "lap": lap,
+                    "lap": laps_done,
                 }
                 channels.update(ch)
 
