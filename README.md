@@ -29,9 +29,9 @@ A lightweight, **1024×600** Qt dashboard for a Raspberry Pi 5 that renders gaug
 * **Assetto Corsa** telemetry (Windows sender → Pi UDP receiver)
 
   * physics: rpm, gear, gas/brake, fuel (L), speed, tyre wear & pressure, etc.
-  * graphics: lap times (current/last/best), laps completed/total, **lap progress** (0..1)
+  * graphics: lap times (current/last/best), laps completed/total
   * static: max rpm, fuel tank capacity
-* **GG diagram**: capped trail (deque `maxlen`), optional sample throttle, button-reset
+* **GG diagram**: capped trail, optional sample throttle, button-reset
 * **Boot/startup**: desktop autostart or systemd (user service)
 * **Pi display**: fullscreen, hidden cursor; works over SSH by exporting `DISPLAY=:0`
 
@@ -61,10 +61,11 @@ pip install -r requirements.txt
 **Run (dev)**
 
 ```bash
-. .venv/bin/activate
 export DISPLAY=:0
 export XAUTHORITY=/home/jad/.Xauthority
-python main.py
+export QT_QPA_PLATFORM=xcb
+source /home/jad/JAD/.venv/bin/activate
+exec /home/jad/JAD/.venv/bin/python /home/jad/JAD/main.py
 ```
 
 > Images: we set `QT_PLUGIN_PATH` and resolve asset paths so PNG/JPG/SVG work both in VS Code and at boot.
@@ -80,7 +81,6 @@ python main.py
   * max\_rpm, fuel\_capacity
   * lap times: `iCurrentTime`, `iLastTime`, `iBestTime`
   * laps: `completedLaps`, `numberOfLaps`
-  * `normalizedCarPosition` (lap progress 0..1)
 
 Set `PI_IP` in the sender to your Pi’s address.
 
