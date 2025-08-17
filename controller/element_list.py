@@ -343,9 +343,14 @@ class ElementList:
             print(f"[parser] Unknown element type: {t}")
             return None
 
-        # Common post-creation for non-group widgets
-        e.setVisible(bool(item.get("visible", True)))
-        e.set_visible_when(item.get("visible_when", None))
-        e.show()
+        rule = item.get("visible_when", None)
+        # If there is a rule, start hidden to avoid the flash.
+        if rule is not None:
+            e.setVisible(False)
+        else:
+            e.setVisible(bool(item.get("visible", True)))
+        e.set_visible_when(rule)
+        if rule is None and e.isVisible():
+            e.show()
         return e
 

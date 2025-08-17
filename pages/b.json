@@ -9,7 +9,7 @@
   },
 
   "elements": [
-    { "type": "text", "x": 512, "y": 50, "width": 560, "height": 60, "centered": true,
+    { "type": "text", "x": 512, "y": 50, "width": 560, "height": 70, "centered": true,
       "text": "Just A Dash", "font_px": 44, "bold": true, "color": "#5f6a73",
       "bg_color": "transparent", "align": "center" },
 

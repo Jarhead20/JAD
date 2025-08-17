@@ -1,0 +1,42 @@
+{
+  "page": { "bg_color": "#000000" },
+
+  "channels": {
+    "rpm_k":     { "source": "rpm", "scale": 0.001, "clamp": [0, 9] },
+    "rpm_norm":  { "source": "rpm", "ratio_to": "max_rpm", "clamp": [0, 1] },
+    "fuel_pct":  { "source": "fuel_l", "ratio_to": "fuel_capacity_l", "clamp": [0, 1], "ema": 0.2 },
+    "speed_kmh": { "source": "speed_kmh", "ema": 0.1 }
+  },
+
+  "elements": [
+    {
+      "type": "image",
+      "x": 300, "y": 300, "width": 340, "height": 500,
+      "centered": true,
+      "path": "assets/BMW.svg",
+      "mode": "contain",
+      "align": "center",
+      "opacity": 1.0,
+      "rotation": 0,
+      "bg_color": "transparent"
+    },   
+    {
+      "type": "image",
+      "x": 720, "y": 300, "width": 340, "height": 500,
+      "centered": true,
+      "path": "assets/check-engine.svg",
+      "mode": "contain",
+      "align": "center",
+      "opacity": 1.0,
+      "rotation": 0,
+      "bg_color": "transparent",
+      "visible_when": {
+        "when": { "ch": "rpm", ">=": 8000 },
+        "latch": true
+      }
+    }  
+
+    
+
+  ]
+}
