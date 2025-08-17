@@ -10,6 +10,9 @@ from PySide6.QtWidgets import QWidget
 
 from elements.element import Element
 
+from pathlib import Path
+APP_ROOT = Path("/home/jad/JAD")
+
 def _qcolor(c):
     return c if isinstance(c, QColor) else QColor(str(c))
 
@@ -52,7 +55,9 @@ class ImageGauge(Element):
                  gamma: float = 1.0,          # curve softness (1=linear)
                  parent: QWidget | None = None):
         super().__init__(x, y, width, height, centered, bg_color, parent)
-        self._path = path
+
+        p = Path(path)
+        self._path = str(p if p.is_absolute() else (APP_ROOT / p).resolve())
         self._channel = channel
         self._min_c = _qcolor(min_color)
         self._mid_c = _qcolor(mid_color) if mid_color else None

@@ -1,4 +1,5 @@
 import os, sys, json, signal, time
+from pathlib import Path
 from PySide6.QtCore import Qt, QTimer, QFileSystemWatcher, QTimer
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout
 from PySide6.QtNetwork import QUdpSocket, QHostAddress
@@ -26,6 +27,16 @@ PINS = [6, 5, 22, 27, 17, 16, 12, 25, 24, 23]  # BCM offsets, pick your 10
 BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
 PAGES_DIR = os.path.join(BASE_DIR, "pages")
 
+APP_ROOT = Path(os.environ.get("JAD_APP_ROOT", Path(__file__).resolve().parents[1]))
+
+def _resolve_path(p: str) -> str:
+    q = Path(p)
+    if not q.is_absolute():
+        q = APP_ROOT / q
+    return str(q)
+
+
+
 def _natural_key(path: str):
     name = os.path.basename(path).lower()
     return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", name)]
@@ -48,6 +59,10 @@ def _ms_to_str(ms: int) -> str:
 # ---- App start ----
 if __name__ == "__main__":
     page_paths = discover_pages()
+
+    
+
+    os.chdir(str(APP_ROOT))
 
     app = QApplication(sys.argv)
 
@@ -76,8 +91,7 @@ if __name__ == "__main__":
     buttons.button("next").clicked.connect(cycler.next_page)
     buttons.button("prev").clicked.connect(cycler.prev_page)
 
-    buttons.button("B").pressed.connect(lambda: print("B pressed"))
-    buttons.button("C").released.connect(lambda: print("C released"))
+    buttons.button("C").clicked.connect(QApplication.quit)
 
     sl = ShiftLights(PINS, mode="bar",active_high=True, flash_at=0.95, flash_hz=8.0)
 

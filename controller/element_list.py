@@ -346,6 +346,7 @@ class ElementList:
         rule = item.get("visible_when", None)
         # If there is a rule, start hidden to avoid the flash.
         if rule is not None:
+            print("not visible")
             e.setVisible(False)
         else:
             e.setVisible(bool(item.get("visible", True)))

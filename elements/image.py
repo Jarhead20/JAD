@@ -4,12 +4,16 @@ import os
 from PySide6.QtCore import Qt, QRectF, QSizeF
 from PySide6.QtGui import QPainter, QPixmap, QColor, QTransform
 from PySide6.QtWidgets import QWidget
+import os
 
 # SVG renderer (install pyside6-addons if you don't have QtSvg)
 from PySide6.QtSvg import QSvgRenderer
 
 # Reuse your Element base
 from elements.element import Element
+
+from pathlib import Path
+APP_ROOT = Path("/home/jad/JAD")
 
 _ALIGN_MAP = {
     "left": Qt.AlignLeft | Qt.AlignVCenter,
@@ -67,7 +71,9 @@ class ImageElement(Element):
             parent=parent,
         )
 
-        self._path = path
+        p = Path(path)
+        self._path = str(p if p.is_absolute() else (APP_ROOT / p).resolve())
+
         self._mode = mode.lower()
         self._align = _ALIGN_MAP.get(align.lower(), Qt.AlignCenter)
         self._opacity = max(0.0, min(1.0, float(opacity)))
