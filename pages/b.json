@@ -45,7 +45,7 @@
     },
     {
         "type": "group",
-        "x": 190, "y": 225, "width": 460, "height": 300,
+        "x": 843, "y": 225, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
@@ -78,7 +78,7 @@
     },
     {
         "type": "group",
-        "x": 190, "y": 450, "width": 460, "height": 300,
+        "x": 843, "y": 450, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
@@ -118,7 +118,7 @@
     
 
     {"type": "group",
-    "x": 843, "y": 200, "width": 460, "height": 300,
+    "x": 190, "y": 200, "width": 460, "height": 300,
     "centered": true,
     "bg_color": "transparent",
     "children": [
@@ -145,7 +145,7 @@
     ]},
 
     {"type": "group",
-      "x": 843, "y": 525, "width": 460, "height": 300,
+      "x": 190, "y": 525, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
@@ -179,7 +179,7 @@
     ]},
 
     {"type": "group",
-      "x": 843, "y": 383, "width": 460, "height": 300,
+      "x": 190, "y": 383, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [

@@ -29,6 +29,9 @@ class PageCycler:
     def next_page(self):
         self._show_index(self.idx + 1)
 
+    def prev_page(self):
+        self._show_index(self.idx -1)
+
     def current_path(self):
         return self.paths[self.idx] if self.paths else None
 

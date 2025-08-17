@@ -12,6 +12,7 @@ from controller.page import Page
 from controller.page_controller import PageCycler
 from controller.channels import channels
 from hardware.shift_lights import ShiftLights
+from hardware.page_button import PageButtons
 
 # ---- Qt / display env (Pi screen) ----
 os.environ["DISPLAY"] = ":0"
@@ -34,6 +35,14 @@ def discover_pages():
     files.sort(key=_natural_key)
     return files
 
+def _ms_to_str(ms: int) -> str:
+    # Handles negatives/invalids gracefully
+    if ms is None or ms < 0:
+        return "--:--.---"
+    s, milli = divmod(int(ms), 1000)
+    m, sec   = divmod(s, 60)
+    return f"{m}:{sec:02d}.{milli:03d}"
+
 
 
 # ---- App start ----
@@ -53,6 +62,20 @@ if __name__ == "__main__":
     root.showFullScreen()
 
     cycler = PageCycler(root=root, paths=page_paths)
+
+    buttons = PageButtons(
+        pins=[11, 9, 13, 26],                 # 4 buttons
+        names=["next", "prev", "B", "C"],      # use whatever labels you like
+        active_low=True,                          # or [True,True,False,True,True]
+        debounce_ms=50,
+        parent=root
+    )
+
+    buttons.button("next").clicked.connect(cycler.next_page)
+    buttons.button("prev").clicked.connect(cycler.prev_page)
+
+    buttons.button("B").pressed.connect(lambda: print("B pressed"))
+    buttons.button("C").released.connect(lambda: print("C released"))
 
     sl = ShiftLights(PINS, mode="bar",active_high=True, flash_at=0.95, flash_hz=8.0)
 
@@ -149,6 +172,12 @@ if __name__ == "__main__":
                 except Exception:
                     dmg = [0.0, 0.0, 0.0, 0.0, 0.0]
 
+                lap_cur_ms  = int(msg.get("lap_current_ms", -1))
+                lap_last_ms = int(msg.get("lap_last_ms", -1))
+                lap_best_ms = int(msg.get("lap_best_ms", -1))
+                laps_done   = int(msg.get("laps_completed", 0))
+                lap = int(msg.get("lap", 0))
+
                 ch = {
                     "rpm": msg.get("rpm", 0),
                     "rpm_k": msg.get("rpm", 0) / 1000.0,
@@ -178,7 +207,22 @@ if __name__ == "__main__":
                     "car_damage_3": dmg[3],
                     "car_damage_4": dmg[4],
                     "car_damage_max": max(dmg),
-                    "car_damage_avg": max(dmg)/5.0,
+                    "car_damage_avg": sum(dmg)/5.0,
+                    "lap_current_ms": lap_cur_ms,
+                    "lap_last_ms":    lap_last_ms,
+                    "lap_best_ms":    lap_best_ms,
+                    "laps_completed": laps_done,
+
+                    # seconds (float) if you prefer binding to numeric readouts
+                    "lap_current_s": lap_cur_ms / 1000.0 if lap_cur_ms >= 0 else 0.0,
+                    "lap_last_s":    lap_last_ms / 1000.0 if lap_last_ms >= 0 else 0.0,
+                    "lap_best_s":    lap_best_ms / 1000.0 if lap_best_ms >= 0 else 0.0,
+
+                    # prettified strings for UI
+                    "lap_current_str": _ms_to_str(lap_cur_ms),
+                    "lap_last_str":    _ms_to_str(lap_last_ms),
+                    "lap_best_str":    _ms_to_str(lap_best_ms),
+                    "lap": lap,
                 }
                 channels.update(ch)
 
@@ -194,41 +238,12 @@ if __name__ == "__main__":
 
     sock.readyRead.connect(on_ready)
 
-    BTN = 27   # BCM27 (pin 13) -> button to GND (active-low)
-
-    # req = gpiod.request_lines(
-    #     "/dev/gpiochip0",
-    #     consumer="PAGE_CYCLE",
-    #     config={
-    #         BTN: gpiod.LineSettings(direction=Direction.INPUT,
-    #                                 bias=Bias.PULL_UP),
-    #     }
-    # )
-
-    # DEBOUNCE_S = 0.05  # 50 ms debounce
-    # state = {"pressed": False, "t": 0.0}
-
-    # def poll_button():
-    #     v = req.get_value(BTN)
-    #     now = time.monotonic()
-    #     pressed = (v == Value.INACTIVE)  # pull-up: LOW means pressed
-    #     if pressed != state["pressed"] and (now - state["t"]) >= DEBOUNCE_S:
-    #         state["pressed"] = pressed
-    #         state["t"] = now
-    #         if pressed:
-    #             cycler.next_page()
-
-    # btn_timer = QTimer()
-    # btn_timer.setInterval(10)  # 10 ms poll
-    # btn_timer.timeout.connect(poll_button)
-    # btn_timer.start()
-
 
     # ---- Clean up on exit ----
     def cleanup():
         sl.close()
         try:
-            req.release()
+            buttons.close()
         except Exception:
             pass
 

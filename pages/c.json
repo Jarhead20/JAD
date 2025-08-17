@@ -16,7 +16,7 @@
 
     {
         "type": "group",
-        "x": 512, "y": 290, "width": 460, "height": 460,
+        "x": 512, "y": 200, "width": 460, "height": 460,
         "centered": true,
         "bg_color": "transparent",
         "children": [
@@ -27,25 +27,9 @@
             "channel":"gear","font_px":120,"bold":true,"color":"white","bg_color":"transparent","align":"center" }
         ]
     },
-
     {
         "type": "group",
-        "x": 512, "y": 140, "width": 460, "height": 150,
-        "centered": true,
-        "bg_color": "transparent",
-        "children": [
-            { "type":"geometry","shape":"round_rect","x":230,"y":75,"width":300,"height":80,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
-
-            { "type":"readout","x":230,"y":60,"width":300,"height":100,"centered":true,
-            "label":"","channel":"speed","fmt":"{value:.0f}","units":" km/h",
-            "label_color":"#8a8f98","value_color":"#ffffff","bg_color":"transparent",
-            "label_font_px":1,"value_font_px":36,"align":"center" }
-        ]
-    },
-    {
-        "type": "group",
-        "x": 190, "y": 225, "width": 460, "height": 300,
+        "x": 843, "y": 225, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
@@ -78,7 +62,7 @@
     },
     {
         "type": "group",
-        "x": 190, "y": 450, "width": 460, "height": 300,
+        "x": 843, "y": 450, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
@@ -118,7 +102,7 @@
     
 
     {"type": "group",
-    "x": 843, "y": 200, "width": 460, "height": 300,
+    "x": 190, "y": 200, "width": 460, "height": 300,
     "centered": true,
     "bg_color": "transparent",
     "children": [
@@ -145,7 +129,7 @@
     ]},
 
     {"type": "group",
-      "x": 843, "y": 525, "width": 460, "height": 300,
+      "x": 190, "y": 525, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
@@ -179,7 +163,7 @@
     ]},
 
     {"type": "group",
-      "x": 843, "y": 383, "width": 460, "height": 300,
+      "x": 190, "y": 383, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
@@ -195,86 +179,27 @@
         "bg_color": "transparent", "label_font_px": 26, "value_font_px": 30 }
       
     ]},
-    
 
-    {
-  "type": "group",
-    "x": 512, "y": 520, "width": 460, "height": 220,
-    "centered": true,
-    "bg_color": "transparent",
-    "children": [
-
-        { "type":"geometry","shape":"round_rect","x":230,"y":98,"width":300,"height":176,"centered":true,
-        "corner_radius":12,"fill_color":"#15181e","stroke_color":"#f5a623","stroke_width":2,"bg_color":"transparent" },
-
-        { "type":"text","x":230,"y":30,"width":360,"height":28,"centered":true,
-        "text":"TYRE PRESS","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
-
-        { "type": "geometry", "shape": "line",
-        "x": 230, "y": 80, "width": 40, "height": 2, "centered": true,
-        "line_dir": "h", "stroke_color": "#2b2f36", "stroke_width": 2, "bg_color": "transparent" },
-        { "type": "geometry", "shape": "line",
-        "x": 230, "y": 150, "width": 40, "height": 2, "centered": true,
-        "line_dir": "h", "stroke_color": "#2b2f36", "stroke_width": 2, "bg_color": "transparent" },
-
-        { "type": "geometry", "shape": "line",
-        "x": 230, "y": 115, "width": 2, "height": 70, "centered": true,
-        "line_dir": "v", "stroke_color": "#2b2f36", "stroke_width": 2, "bg_color": "transparent" },
+    {"type": "group",
+      "x": 512, "y": 470, "width": 460, "height": 460,
+      "centered": true,
+      "bg_color": "transparent",
+      "children": [
 
 
+      { "type":"geometry","shape":"round_rect","x":230,"y":222,"width":300,"height":265,"centered":true,
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
         {
-        "type":"linear_gauge","x":200,"y":80,"width":30,"height":60,"centered":true,
-        "label":"","max_val":1,"channel":"tyre_wear_fl",
-        "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center", "redline":2.0
-        },
-        {
-        "type":"linear_gauge","x":260,"y":80,"width":30,"height":60,"centered":true,
-        "label":"","max_val":1,"channel":"tyre_wear_fr",
-        "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center", "redline":2.0
-        },
-        {
-        "type":"linear_gauge","x":200,"y":150,"width":30,"height":60,"centered":true,
-        "label":"","max_val":1,"channel":"tyre_wear_rl",
-        "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center", "redline":2.0
-        },
-        {
-        "type":"linear_gauge","x":260,"y":150,"width":30,"height":60,"centered":true,
-        "label":"","max_val":1,"channel":"tyre_wear_rr",
-        "bg_color":"transparent","horizontal": false,
-        "padding": 0, "track_align": "center", "redline":2.0
-        },
-        { "type": "readout",
-        "x": 130, "y": 80, "width": 120, "height": 50, "centered": true,
-        "label": "FL", "channel": "wheel_pressure_fl",
-        "fmt": "{value:.1f}", "units": " psi",
-        "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 },
-
-        { "type": "readout",
-        "x": 330, "y": 80, "width": 120, "height": 50, "centered": true,
-        "label": "FR", "channel": "wheel_pressure_fr",
-        "fmt": "{value:.1f}", "units": " psi",
-        "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 },
-
-        { "type": "readout",
-        "x": 130, "y": 150, "width": 120, "height": 50, "centered": true,
-        "label": "RL", "channel": "wheel_pressure_rl",
-        "fmt": "{value:.1f}", "units": " psi",
-        "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 },
-
-        { "type": "readout",
-        "x": 330, "y": 150, "width": 120, "height": 50, "centered": true,
-        "label": "RR", "channel": "wheel_pressure_rr",
-        "fmt": "{value:.1f}", "units": " psi",
-        "label_color": "#9aa0a6", "value_color": "#ffffff",
-        "bg_color": "transparent", "label_font_px": 12, "value_font_px": 15 }
-    ]
+      "type": "round_gauge",
+      "x": 230, "y": 225, "width": 250, "height": 250, "centered": true,
+      "label": "RPM x1000", "font_size": 20,
+      "max_val": 9.0, "redline": 8.0,
+      "channel": "rpm_k"
     }
+      
+    ]}
+
+    
 
     
 
