@@ -110,7 +110,7 @@ if __name__ == "__main__":
     buttons.button("prev").clicked.connect(cycler.prev_page)
 
     buttons.button("C").clicked.connect(QApplication.quit)
-    # buttons.button("B").clicked.connect(lambda: capture_screenshot(root))
+    buttons.button("B").clicked.connect(lambda: capture_screenshot(root))
 
     sl = ShiftLights(PINS, mode="bar",active_high=True, flash_at=0.95, flash_hz=8.0)
 
