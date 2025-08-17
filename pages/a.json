@@ -21,7 +21,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":230,"y":240,"width":300,"height":220,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             { "type":"gear","x":230,"y":240,"width":300,"height":160,"centered":true,
             "channel":"gear","font_px":120,"bold":true,"color":"white","bg_color":"transparent","align":"center" }
@@ -35,7 +35,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":230,"y":75,"width":300,"height":80,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             { "type":"readout","x":230,"y":60,"width":300,"height":100,"centered":true,
             "label":"","channel":"speed","fmt":"{value:.0f}","units":" km/h",
@@ -50,7 +50,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":220,"y":125,"width":330,"height":200,"centered":true,
-              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
             
             { "type":"text","x":220,"y":50,"width":360,"height":28,"centered":true,
             "text":"DAMAGE","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
@@ -83,7 +83,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":220,"y":153,"width":330,"height":286,"centered":true,
-              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             {
               "type": "gg",
@@ -106,7 +106,7 @@
               "trail_color": "#2fc1ff",
               "point_color": "#ffffff",
               "point_radius_px": 5,
-              "trail_len": 240,
+              "trail_len": 1,
               "ema": 0.2,
 
               "invert_lat": true,
@@ -126,7 +126,7 @@
 
 
     { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":210, "centered":true,
-      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
     { "type":"readout","x":230,"y":90,"width":200,"height":70,"centered":true,
   "label":"CURRENT","channel":"lap_current_str","fmt":"{value}",
@@ -153,7 +153,7 @@
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
-        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
       { "type":"text","x":230,"y":120,"width":360,"height":28,"centered":true,
             "text":"FUEL","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
@@ -188,7 +188,7 @@
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
-        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
         { "type": "readout",
         "x": 230, "y": 160, "width": 325, "height": 120, "centered": true,
         "label": "LAP", "channel": "lap",
@@ -207,7 +207,7 @@
     "children": [
 
         { "type":"geometry","shape":"round_rect","x":230,"y":98,"width":300,"height":176,"centered":true,
-        "corner_radius":12,"fill_color":"#15181e","stroke_color":"#f5a623","stroke_width":2,"bg_color":"transparent" },
+        "corner_radius":12,"fill_color":"#15181e","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
         { "type":"text","x":230,"y":30,"width":360,"height":28,"centered":true,
         "text":"TYRE PRESS","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },

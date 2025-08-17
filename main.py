@@ -68,7 +68,7 @@ if __name__ == "__main__":
         names=["next", "prev", "B", "C"],      # use whatever labels you like
         active_low=True,                          
         store=channels,
-        debounce_ms=50,
+        debounce_ms=10,
         prefix="btn_",
         parent=root
     )

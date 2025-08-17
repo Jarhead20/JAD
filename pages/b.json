@@ -21,7 +21,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":230,"y":240,"width":300,"height":220,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             { "type":"gear","x":230,"y":240,"width":300,"height":160,"centered":true,
             "channel":"gear","font_px":120,"bold":true,"color":"white","bg_color":"transparent","align":"center" }
@@ -35,7 +35,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":230,"y":75,"width":300,"height":80,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             { "type":"readout","x":230,"y":60,"width":300,"height":100,"centered":true,
             "label":"","channel":"speed","fmt":"{value:.0f}","units":" km/h",
@@ -45,12 +45,12 @@
     },
     {
         "type": "group",
-        "x": 843, "y": 225, "width": 460, "height": 300,
+        "x": 854, "y": 225, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":220,"y":125,"width":330,"height":200,"centered":true,
-              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
             
             { "type":"text","x":220,"y":50,"width":360,"height":28,"centered":true,
             "text":"DAMAGE","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
@@ -78,12 +78,12 @@
     },
     {
         "type": "group",
-        "x": 843, "y": 450, "width": 460, "height": 300,
+        "x": 854, "y": 450, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":220,"y":153,"width":330,"height":286,"centered":true,
-              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             {
               "type": "gg",
@@ -101,12 +101,12 @@
               "show_square": false,
               "show_labels": true,
 
-              "grid_color": "#2b2f36",
+              "grid_color": "#f5a623",
               "axis_color": "#8a8f98",
               "trail_color": "#2fc1ff",
               "point_color": "#ffffff",
               "point_radius_px": 5,
-              "trail_len": 240,
+              "trail_len": 1,
               "ema": 0.2,
 
               "invert_lat": true,
@@ -119,14 +119,14 @@
     
 
     {"type": "group",
-    "x": 190, "y": 200, "width": 460, "height": 300,
+    "x": 183, "y": 200, "width": 460, "height": 300,
     "centered": true,
     "bg_color": "transparent",
     "children": [
 
 
     { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":210, "centered":true,
-      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
     { "type":"readout","x":230,"y":90,"width":200,"height":70,"centered":true,
   "label":"CURRENT","channel":"lap_current_str","fmt":"{value}",
@@ -146,14 +146,14 @@
     ]},
 
     {"type": "group",
-      "x": 190, "y": 525, "width": 460, "height": 300,
+      "x": 183, "y": 525, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
-        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
       
 
@@ -180,14 +180,14 @@
     ]},
 
     {"type": "group",
-      "x": 190, "y": 383, "width": 460, "height": 300,
+      "x": 183, "y": 383, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
-        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
         { "type": "readout",
         "x": 230, "y": 160, "width": 325, "height": 120, "centered": true,
         "label": "LAP", "channel": "lap",
@@ -213,14 +213,14 @@
 
         { "type": "geometry", "shape": "line",
         "x": 230, "y": 80, "width": 40, "height": 2, "centered": true,
-        "line_dir": "h", "stroke_color": "#2b2f36", "stroke_width": 2, "bg_color": "transparent" },
+        "line_dir": "h", "stroke_color": "#f5a623", "stroke_width": 2, "bg_color": "transparent" },
         { "type": "geometry", "shape": "line",
         "x": 230, "y": 150, "width": 40, "height": 2, "centered": true,
-        "line_dir": "h", "stroke_color": "#2b2f36", "stroke_width": 2, "bg_color": "transparent" },
+        "line_dir": "h", "stroke_color": "#f5a623", "stroke_width": 2, "bg_color": "transparent" },
 
         { "type": "geometry", "shape": "line",
         "x": 230, "y": 115, "width": 2, "height": 70, "centered": true,
-        "line_dir": "v", "stroke_color": "#2b2f36", "stroke_width": 2, "bg_color": "transparent" },
+        "line_dir": "v", "stroke_color": "#f5a623", "stroke_width": 2, "bg_color": "transparent" },
 
 
         {

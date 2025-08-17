@@ -21,7 +21,7 @@
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":230,"y":240,"width":300,"height":220,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             { "type":"gear","x":230,"y":240,"width":300,"height":160,"centered":true,
             "channel":"gear","font_px":120,"bold":true,"color":"white","bg_color":"transparent","align":"center" }
@@ -29,12 +29,12 @@
     },
     {
         "type": "group",
-        "x": 843, "y": 225, "width": 460, "height": 300,
+        "x": 854, "y": 225, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":220,"y":125,"width":330,"height":200,"centered":true,
-              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
             
             { "type":"text","x":220,"y":50,"width":360,"height":28,"centered":true,
             "text":"DAMAGE","font_px":18,"bold":true,"color":"#f5a623","bg_color":"transparent","align":"center" },
@@ -62,12 +62,12 @@
     },
     {
         "type": "group",
-        "x": 843, "y": 450, "width": 460, "height": 300,
+        "x": 854, "y": 450, "width": 460, "height": 300,
         "centered": true,
         "bg_color": "transparent",
         "children": [
             { "type":"geometry","shape":"round_rect","x":220,"y":153,"width":330,"height":286,"centered":true,
-              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+              "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
             {
               "type": "gg",
@@ -85,7 +85,7 @@
               "show_square": false,
               "show_labels": true,
 
-              "grid_color": "#2b2f36",
+              "grid_color": "#f5a623",
               "axis_color": "#8a8f98",
               "trail_color": "#2fc1ff",
               "point_color": "#ffffff",
@@ -102,14 +102,14 @@
     
 
     {"type": "group",
-    "x": 190, "y": 200, "width": 460, "height": 300,
+    "x": 183, "y": 200, "width": 460, "height": 300,
     "centered": true,
     "bg_color": "transparent",
     "children": [
 
 
     { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":210, "centered":true,
-      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+      "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
     { "type":"readout","x":230,"y":90,"width":200,"height":70,"centered":true,
   "label":"CURRENT","channel":"lap_current_str","fmt":"{value}",
@@ -129,14 +129,14 @@
     ]},
 
     {"type": "group",
-      "x": 190, "y": 525, "width": 460, "height": 300,
+      "x": 183, "y": 525, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
-        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
 
       
 
@@ -163,14 +163,14 @@
     ]},
 
     {"type": "group",
-      "x": 190, "y": 383, "width": 460, "height": 300,
+      "x": 183, "y": 383, "width": 460, "height": 300,
       "centered": true,
       "bg_color": "transparent",
       "children": [
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":155,"width":325,"height":130, "centered":true,
-        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+        "corner_radius":14,"fill_color":"#0e1116","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
         { "type": "readout",
         "x": 230, "y": 160, "width": 325, "height": 120, "centered": true,
         "label": "LAP", "channel": "lap",
@@ -188,7 +188,7 @@
 
 
       { "type":"geometry","shape":"round_rect","x":230,"y":222,"width":300,"height":265,"centered":true,
-            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#2b2f36","stroke_width":3,"bg_color":"transparent" },
+            "corner_radius":18,"fill_color":"#0f1115","stroke_color":"#f5a623","stroke_width":3,"bg_color":"transparent" },
         {
       "type": "round_gauge",
       "x": 230, "y": 225, "width": 250, "height": 250, "centered": true,
